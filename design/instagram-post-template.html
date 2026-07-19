@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kabasakal — Instagram Gönderi Şablonu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --bg:#171310; --cream:#F7F1E6; --insta-orange:#F4801E; --line:rgba(247,241,230,.15);
+    --mono:'Space Mono',monospace; --display:'Archivo Black',sans-serif; --body:'Work Sans',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--bg);color:var(--cream);font-family:var(--body);}
+
+  .layout{ display:flex; gap:32px; padding:32px; align-items:flex-start; flex-wrap:wrap; }
+
+  .panel{ width:340px; flex-shrink:0; display:flex; flex-direction:column; gap:18px; }
+  .panel h1{ font-family:var(--display); font-size:20px; margin:0 0 4px; }
+  .panel p.hint{ font-family:var(--mono); font-size:11px; color:rgba(247,241,230,.6); line-height:1.6; margin:0 0 8px; }
+  .field{ display:flex; flex-direction:column; gap:6px; font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--insta-orange); }
+  .field input, .field textarea, .field select{
+    font-family:var(--body); font-size:14px; color:var(--cream); background:#211b15;
+    border:1px solid var(--line); border-radius:8px; padding:10px 12px; resize:vertical;
+  }
+  .download-btn{
+    font-family:var(--body); font-weight:800; font-size:14px; text-transform:uppercase;
+    background:var(--insta-orange); color:var(--bg); border:none; padding:14px 20px;
+    border-radius:30px; cursor:pointer; margin-top:8px;
+  }
+  .download-btn:hover{ opacity:.9; }
+  .scale-note{ font-family:var(--mono); font-size:10px; color:rgba(247,241,230,.45); }
+
+  /* Preview wrapper scales the real 1080x1350 post down for on-screen editing;
+     html2canvas targets #post directly, so export always happens at full native resolution. */
+  .preview-wrap{ width:432px; height:540px; overflow:hidden; border:1px solid var(--line); border-radius:12px; }
+  .preview-scale{ transform:scale(0.4); transform-origin:top left; }
+
+  #post{
+    width:1080px; height:1350px; position:relative; overflow:hidden;
+    background:var(--insta-orange); color:var(--cream); font-family:var(--body);
+  }
+  .checker{
+    height:44px; width:100%;
+    background-image:
+      linear-gradient(45deg, #171310 25%, transparent 25%, transparent 75%, #171310 75%, #171310),
+      linear-gradient(45deg, #171310 25%, #F7F1E6 25%, #F7F1E6 75%, #171310 75%, #171310);
+    background-size:44px 44px; background-position:0 0, 22px 22px;
+  }
+  .post-logo{ display:flex; flex-direction:column; align-items:center; margin-top:28px; }
+  .post-logo img{ width:110px; height:110px; border-radius:50%; object-fit:cover; }
+  .post-logo span{
+    font-family:var(--display); font-size:34px; color:#D6301F; letter-spacing:.02em; margin-top:6px;
+    -webkit-text-stroke:1.5px #171310;
+  }
+  .post-eyebrow{
+    display:block; width:fit-content; margin:44px auto 0; font-family:var(--body); font-weight:800;
+    font-size:24px; color:var(--cream); background:rgba(23,19,16,.35); padding:14px 26px; border-radius:10px;
+    text-transform:uppercase;
+  }
+  .post-headline{
+    font-family:var(--display); font-size:76px; line-height:.95; text-align:center; color:var(--cream);
+    margin:28px 40px 0; text-transform:uppercase;
+  }
+  .post-sub{
+    font-family:var(--body); font-weight:600; font-size:24px; text-align:center; color:var(--cream);
+    margin:20px 60px 0; line-height:1.4;
+  }
+  .post-smoke{ position:absolute; opacity:.9; pointer-events:none; }
+  .post-smoke.a{ top:340px; left:-30px; width:260px; }
+  .post-smoke.b{ top:280px; right:-60px; width:340px; }
+  .post-burger{
+    position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+    width:900px; max-height:520px; object-fit:cover; object-position:top;
+    border-radius:24px 24px 0 0;
+  }
+  .post-footer{
+    position:absolute; bottom:24px; left:40px; right:40px; display:flex; justify-content:space-between;
+    align-items:flex-end; font-family:var(--mono); font-size:16px; color:var(--cream); z-index:5;
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="panel">
+    <h1>Instagram Gönderi Şablonu</h1>
+    <p class="hint">Kabasakal'ın gerçek Instagram gönderilerindeki (@kabasakalburger) dama deseni + turuncu zemin + maskot logo diliyle. Metinleri değiştir, altındaki butonla PNG indir.</p>
+
+    <label class="field">Üst Rozet (kısa)
+      <input type="text" id="in-eyebrow" value="ETİN EN LEZZETLİ HALİ BURADA!">
+    </label>
+    <label class="field">Başlık
+      <textarea id="in-headline" rows="2">EFSANE BURGERLER</textarea>
+    </label>
+    <label class="field">Alt Yazı
+      <textarea id="in-sub" rows="2">Her lokmada mutluluk, her ısırıkta lezzet patlaması!</textarea>
+    </label>
+    <label class="field">Burger Fotoğrafı
+      <select id="in-photo"></select>
+    </label>
+    <label class="field">Kullanıcı Adı
+      <input type="text" id="in-handle" value="@kabasakalburger">
+    </label>
+    <label class="field">Hashtag
+      <input type="text" id="in-hashtag" value="#burgertime">
+    </label>
+
+    <button class="download-btn" id="download-btn">PNG Olarak İndir (1080×1350)</button>
+    <p class="scale-note">Önizleme küçültülmüş gösteriliyor — indirilen dosya tam çözünürlükte (1080×1350) olur.</p>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-scale">
+      <div id="post">
+        <div class="checker"></div>
+        <div class="post-logo">
+          <img src="../assets/mascot/mascot.png" alt="Kabasakal maskot logosu" onerror="this.style.display='none'">
+          <span>KABASAKAL</span>
+        </div>
+        <span class="post-eyebrow" id="out-eyebrow">ETİN EN LEZZETLİ HALİ BURADA!</span>
+        <h2 class="post-headline" id="out-headline">EFSANE BURGERLER</h2>
+        <p class="post-sub" id="out-sub">Her lokmada mutluluk, her ısırıkta lezzet patlaması!</p>
+
+        <svg class="post-smoke a" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 180 Q 60 140 30 100 Q 0 60 50 20" stroke="#F7F1E6" stroke-width="10" fill="none" stroke-linecap="round" opacity=".5"/>
+        </svg>
+        <svg class="post-smoke b" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 240 Q 90 200 60 150 Q 20 100 100 60 Q 160 30 140 10" stroke="#F7F1E6" stroke-width="12" fill="none" stroke-linecap="round" opacity=".5"/>
+        </svg>
+
+        <img class="post-burger" id="out-photo" src="" alt="">
+
+        <div class="post-footer">
+          <span id="out-hashtag">#burgertime</span>
+          <span id="out-handle">@kabasakalburger</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function bind(inputId, outId){
+    var input = document.getElementById(inputId);
+    var out = document.getElementById(outId);
+    input.addEventListener('input', function(){ out.textContent = input.value; });
+  }
+  bind('in-eyebrow', 'out-eyebrow');
+  bind('in-headline', 'out-headline');
+  bind('in-sub', 'out-sub');
+  bind('in-handle', 'out-handle');
+  bind('in-hashtag', 'out-hashtag');
+
+  var photoSelect = document.getElementById('in-photo');
+  var photoOut = document.getElementById('out-photo');
+
+  fetch('../data/menu.json')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var burgerCat = data.categories.find(function(c){ return c.name === 'Burgerler'; });
+      (burgerCat ? burgerCat.items : []).forEach(function(item){
+        if(!item.photo || item.photo.indexOf('PLACEHOLDER') !== -1) return;
+        var opt = document.createElement('option');
+        opt.value = '../' + item.photo;
+        opt.textContent = item.name;
+        photoSelect.appendChild(opt);
+      });
+      if(photoSelect.options.length){
+        photoSelect.selectedIndex = 0;
+        photoOut.src = photoSelect.value;
+      }
+    });
+
+  photoSelect.addEventListener('change', function(){
+    photoOut.src = photoSelect.value;
+  });
+
+  document.getElementById('download-btn').addEventListener('click', function(){
+    var btn = this;
+    var scaleWrap = document.querySelector('.preview-scale');
+    btn.disabled = true;
+    btn.textContent = 'Hazırlanıyor…';
+    // html2canvas measures the element's rendered (post-transform) box, so the 0.4 preview
+    // scale on the ancestor would otherwise export a shrunk 432×540 image instead of 1080×1350.
+    scaleWrap.style.transform = 'none';
+    html2canvas(document.getElementById('post'), { useCORS: true, scale: 1 }).then(function(canvas){
+      var link = document.createElement('a');
+      link.download = 'kabasakal-post.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }).finally(function(){
+      scaleWrap.style.transform = 'scale(0.4)';
+      btn.disabled = false;
+      btn.textContent = 'PNG Olarak İndir (1080×1350)';
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

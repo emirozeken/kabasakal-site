@@ -1,0 +1,54 @@
+{
+  "note": "Kaynak: Yemeksepeti restoran sayfası (kullanıcı ekran görüntüsüyle paylaştı, 2026-07-19). 'Kabasakal Burger' kaynakta 'Kabasakall Burger' (çift L) olarak yazıyordu — muhtemel yazım hatası, restoran ismiyle eşleşen imza ürün olduğu için düzeltildi; abiyle teyit edilmeli. 'tags' alanı benim (Claude) her ürünün gerçek açıklamasındaki malzemelerden çıkardığım, 'Sana Uygun Burger Hangisi?' testinde eşleştirme için kullanılan basit kategoriler — abi isterse değiştirebilir, tat/lezzet iddiası değil sadece malzeme bazlı gruplama. Burger/yan ürün fotoğrafları kullanıcının paylaştığı gerçek fotoğraflar (assets/menu/ altında, kullanıcı tarafından kaydedildi 2026-07-19). İçecekler için gerçek fotoğraf yerine kasıtlı olarak 'icon' alanıyla basit illüstrasyon kullanıldı — rastgele internet stok fotoğrafı telif riski taşıdığı için, kullanıcının onayıyla bu yola gidildi.",
+  "categories": [
+    {
+      "name": "Burgerler",
+      "items": [
+        { "name": "Kabasakal Burger", "price": 375, "description": "130 gr. smash burger köfte, burger sosu, iceberg marul, domates, turşu.", "popular": true, "tags": ["klasik"], "photo": "assets/menu/kabasakal-burger.jpg" },
+        { "name": "Cheeseburger", "price": 375, "description": "130 gr. smash burger köfte, burger peyniri, burger sosu, turşu. Patates kızartması ile.", "popular": true, "tags": ["klasik","peynir"], "photo": "assets/menu/cheeseburger.jpg" },
+        { "name": "Ayı Burger", "price": 475, "description": "150 gr. smash burger köfte, burger peyniri, kıtır soğan, karamelize soğan.", "popular": true, "tags": ["peynir","sogan"], "photo": "assets/menu/ayi-burger.jpg" },
+        { "name": "Safiinaz Tavuk Burger", "price": 300, "description": "Penne tavuk, mayonez, iceberg marul, turşu. Patates kızartması ile.", "popular": true, "tags": ["tavuk","klasik"], "photo": "assets/menu/safiinaz-tavuk-burger.jpg" },
+        { "name": "Bizon Burger", "price": 575, "description": "210 gr. burger köftesi, karamelize soğan, tütsülenmiş biftek parçaları.", "tags": ["buyuk","sogan","gurme"], "photo": "assets/menu/bizon-burger.jpg" },
+        { "name": "Rhino Burger", "price": 550, "description": "180 gr. smash burger köftesi, dana kaburga bacon, trüflü mayonez, acı sos.", "tags": ["gurme","aci","bacon"], "photo": "assets/menu/rhino-triple-mustard-cheeseburger.jpg" },
+        { "name": "Red Fox Burger", "price": 500, "description": "150 gr. smash burger köftesi, orman meyveleri, tulum peyniri, trüflü mayonez.", "tags": ["gurme","peynir","tatli"], "photo": "assets/menu/red-fox-burger.jpg" },
+        { "name": "Triple Mustard Cheeseburger", "price": 500, "description": "180 gr. smash burger köfte, burger sosu, sweet chili sos, burger turşusu.", "tags": ["tatli-aci"], "photo": "assets/menu/rhino-triple-mustard-cheeseburger.jpg" },
+        { "name": "Triple Mustard Cheese", "price": 500, "description": "180 gr. burger köftesi, burger sosu, sweet chili sos, burger turşusu, 3 adet cheddar peyniri. TODO: bu ürünün 'Triple Mustard Cheeseburger' ile aynı ürün olup olmadığı abiden teyit edilmeli, kaynakta ikisi de ayrı satır olarak listelenmişti.", "tags": ["tatli-aci","peynir"], "photo": "assets/menu/PLACEHOLDER.jpg" },
+        { "name": "Acı mı Tatlı mı Burger", "price": 375, "description": "130 gr. smash burger köfte, burger peyniri, sweet chili sos, karamelize soğan.", "tags": ["tatli-aci","peynir","sogan"], "photo": "assets/menu/aci-mi-tatli-mi-burger.jpg" },
+        { "name": "Mantar Burger", "price": 450, "description": "130 gr. smash burger köftesi, trüflü mayonez, burger peyniri, kaşar.", "tags": ["gurme","peynir"], "photo": "assets/menu/mantar-burger.jpg" },
+        { "name": "Kıbrıslı Burger", "price": 475, "description": "130 gr. smash burger köfte, burger peyniri, burger sosu, kızarmış hellim.", "tags": ["farkli","peynir"], "photo": "assets/menu/kibrisli-burger.jpg" },
+        { "name": "Sith Burger", "price": 475, "description": "130 gr. smash burger köfte, burger peyniri, barbekü sos, antrikot dilim.", "tags": ["barbeku","peynir","gurme"], "photo": "assets/menu/sith-burger.jpg" },
+        { "name": "Gym Burger", "price": 475, "description": "130 gr. smash burger köfte, yumurta, dana bacon, dilim antrikot, burger sosu.", "tags": ["buyuk","bacon","gurme"], "photo": "assets/menu/gym-burger.jpg" }
+      ]
+    },
+    {
+      "name": "Yan Ürünler",
+      "items": [
+        { "name": "Çıtır Tabağı", "price": 350, "description": "Patates kızartması, 5 adet soğan halkası, 5 adet çıtır tavuk, 5 adet dana bacon.", "popular": true, "photo": "assets/menu/citir-tabagi.jpg" },
+        { "name": "4'lü Kemiksiz Çıtır Tavuk", "price": 150, "description": "4 adet olarak servis edilir.", "popular": true, "photo": "assets/menu/kemiksiz-citir-tavuk.jpg" },
+        { "name": "8'li Kemiksiz Çıtır Tavuk", "price": 280, "description": "8 adet olarak servis edilir.", "photo": "assets/menu/kemiksiz-citir-tavuk.jpg" },
+        { "name": "Patates Kızartması (Küçük Boy)", "price": 100, "description": "Parmak dilim.", "photo": "assets/menu/patates-kizartmasi.jpg" },
+        { "name": "Patates Kızartması (Orta Boy)", "price": 120, "description": "Parmak dilim.", "photo": "assets/menu/patates-kizartmasi.jpg" },
+        { "name": "Patates Kızartması (Büyük Boy)", "price": 150, "description": "Parmak dilim.", "photo": "assets/menu/patates-kizartmasi.jpg" },
+        { "name": "4'lü Soğan Halkası", "price": 60, "description": "4 adet olarak servis edilir.", "photo": "assets/menu/sogan-halkasi.jpg" },
+        { "name": "8'li Soğan Halkası", "price": 100, "description": "8 adet olarak servis edilir.", "photo": "assets/menu/sogan-halkasi.jpg" }
+      ]
+    },
+    {
+      "name": "İçecekler",
+      "items": [
+        { "name": "Ayran (27 cl.)", "price": 40, "description": "Büyük.", "icon": {"shape":"cup","color":"#F7F1E6"} },
+        { "name": "Coca-Cola (33 cl.)", "price": 80, "description": "Kutu içecek.", "icon": {"shape":"can","color":"#D6301F"} },
+        { "name": "Coca-Cola Zero (33 cl.)", "price": 80, "description": "Kutu içecek.", "icon": {"shape":"can","color":"#1A1A1A"} },
+        { "name": "Fanta (33 cl.)", "price": 80, "description": "Kutu içecek.", "icon": {"shape":"can","color":"#FF7A1A"} },
+        { "name": "Sprite (33 cl.)", "price": 80, "description": "Kutu içecek.", "icon": {"shape":"can","color":"#7BB238"} },
+        { "name": "Fuse Tea Şeftali (33 cl.)", "price": 80, "description": "Kutu içecek.", "icon": {"shape":"can","color":"#FFB37A"} },
+        { "name": "Fuse Tea Kavun & Çilek (33 cl.)", "price": 80, "description": "Kutu içecek.", "icon": {"shape":"can","color":"#FF6F91"} },
+        { "name": "Fuse Tea Karpuz (33 cl.)", "price": 80, "description": "Kutu içecek.", "icon": {"shape":"can","color":"#E8435B"} },
+        { "name": "Fuse Tea Mango (33 cl.)", "price": 80, "description": "Kutu içecek.", "icon": {"shape":"can","color":"#FFC93C"} },
+        { "name": "Dört Mevsim Gazoz (25 cl.)", "price": 60, "description": "Cam şişe.", "icon": {"shape":"bottle","color":"#C97A1F"} },
+        { "name": "Soda (20 cl.)", "price": 25, "description": "Cam şişe.", "icon": {"shape":"bottle","color":"#CFE8EF"} },
+        { "name": "Su (50 cl.)", "price": 25, "description": "Pet şişe.", "icon": {"shape":"bottle","color":"#E8F4F8"} }
+      ]
+    }
+  ]
+}

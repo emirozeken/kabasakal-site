@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kabasakal Restaurant — Akhisar Smash Burger</title>
+<meta name="description" content="Akhisar'da smash burger. Katman katman, ısırılabilir, iddialı.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="progressbar" id="progressbar"></div>
+  <nav class="topnav">
+    <span class="brand">KABASAKAL<span>.</span></span>
+    <div class="links">
+      <a href="#menu">Mönü</a>
+      <a href="#test">Test</a>
+      <a href="#konum">Konum</a>
+      <a href="#tasarla">Tasarla</a>
+      <a href="#siparis">Sipariş</a>
+      <a href="#hikaye">Hikaye</a>
+    </div>
+  </nav>
+
+  <section class="hero" id="hero">
+    <span class="eyebrow">Akhisar · Smash Burger</span>
+    <h1>KABASAKAL<br><em>KATMAN KATMAN</em></h1>
+    <p>Sıradan bir mönü sayfası değil — burgerin içine girdiğin bir yolculuk. Aşağı kaydır.</p>
+    <div class="scrollhint" id="scrollhint"><span>Kaydır</span><span class="arrow">↓</span></div>
+    <div class="mascot">
+      <span class="bubble" aria-hidden="true">Hoş geldin! 👋</span>
+      <img src="assets/mascot/mascot.png" alt="Elinde Kabasakal burgeri tutarak gülümseyen karakter">
+      <div class="placeholder-box">Karakter görseli bekleniyor<br>assets/mascot/mascot.png</div>
+    </div>
+  </section>
+
+  <section class="scrollzoom" id="scrollzoom">
+    <div class="sticky">
+      <div class="lens-sheen" aria-hidden="true"></div>
+      <div class="stack" id="stack">
+        <div class="slab bun-top"></div>
+        <div class="slab lettuce"></div>
+        <div class="tomato"></div>
+        <div class="slab cheese"></div>
+        <div class="slab patty"></div>
+        <div class="slab sauce"></div>
+        <div class="slab bun-bottom"></div>
+      </div>
+
+      <div class="caption" data-stage="1">
+        <span class="tag">Katman 01 · Ekmek</span>
+        <h2>Taze Pişen Brioche</h2>
+        <p>[Yer tutucu — fırın/tedarik bilgisi netleşince güncellenecek]</p>
+        <button type="button" class="fact-btn" aria-expanded="false" aria-controls="fact-1">Bilgi +</button>
+        <div class="fact-pop" id="fact-1" role="note">Bilgi: Brioche ekmek yüksek tereyağı ve yumurta oranıyla tanınır — bu da yumuşak, hafif tatlımsı bir doku verir. [Kabasakal'a özgü tedarik detayı netleşince eklenecek]</div>
+      </div>
+      <div class="caption" data-stage="2">
+        <span class="tag">Katman 02 · Tazelik</span>
+        <h2>Marul &amp; Domates</h2>
+        <p>Her siparişte taze kesim. [Gerçek detayla değiştirilecek]</p>
+        <button type="button" class="fact-btn" aria-expanded="false" aria-controls="fact-2">Bilgi +</button>
+        <div class="fact-pop" id="fact-2" role="note">Bilgi: Taze kesilmiş sebze, burgerin sıcak katmanlarına karşı gereken çıtırlığı ve serinliği katar. [Kabasakal'ın tedarikçi bilgisiyle güncellenecek]</div>
+      </div>
+      <div class="caption" data-stage="3">
+        <span class="tag">Katman 03 · Smash Köfte</span>
+        <h2>Sıcak Sacda Ezilen Et</h2>
+        <p>Kabasakal'ın imzası burada. [Gerçek teknik bilgiyle güncellenecek]</p>
+        <button type="button" class="fact-btn" aria-expanded="false" aria-controls="fact-3">Bilgi +</button>
+        <div class="fact-pop" id="fact-3" role="note">Bilgi: Smash tekniğinde köfte sıcak sacda kuvvetle ezilir; dış yüzey karamelize olurken (Maillard reaksiyonu) iç kısım sulu kalır. [Kabasakal'ın kendi tekniği netleşince eklenecek]</div>
+      </div>
+      <div class="caption" data-stage="4">
+        <span class="tag">Katman 04 · Özel Sos</span>
+        <h2>Evde Yapılan Sos</h2>
+        <p>[Sos hikayesi — gerçek bilgiyle yazılacak]</p>
+        <button type="button" class="fact-btn" aria-expanded="false" aria-controls="fact-4">Bilgi +</button>
+        <div class="fact-pop" id="fact-4" role="note">Bilgi: İyi bir burger sosu tatlı-ekşi-baharatlı dengesi kurar ve katmanları her ısırıkta birbirine bağlar. [Sosun gerçek hikayesiyle güncellenecek]</div>
+      </div>
+
+      <div class="dots" id="dots"></div>
+
+      <div class="outro" id="outro">
+        <p class="word">AÇILDI. <em>AFİYET OLSUN.</em></p>
+        <p class="addr">167. Sokak No:72 · Akhisar, Manisa</p>
+        <a class="cta" href="#menu">Mönüyü Gör</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="menu">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">Mönü</span>
+        <h2>Ürün <em>Yıldız</em> Olur</h2>
+      </div>
+      <p class="menu-note">TODO: Bazı ürün fotoğrafları (özellikle "Triple Mustard Cheese") hâlâ bekleniyor. Aşağıdaki kartlar <code>data/menu.json</code> dosyasından geliyor — o dosya güncellenince site otomatik güncellenir, kod dokunmaya gerek yok.</p>
+      <div class="menu-grid" id="menu-grid"></div>
+    </div>
+  </section>
+
+  <section class="section" id="test">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">Küçük Bir Test</span>
+        <h2>Sana Uygun <em>Burger</em> Hangisi?</h2>
+      </div>
+      <div class="quiz" id="quiz">
+        <div class="quiz-progress" aria-hidden="true"><div class="quiz-progress-fill" id="quiz-progress-fill"></div></div>
+        <p class="quiz-step-label" id="quiz-step-label"></p>
+        <div class="quiz-questions" id="quiz-questions"></div>
+        <div class="quiz-result" id="quiz-result" aria-live="polite" hidden>
+          <span class="eyebrow">Sonucun</span>
+          <h3 id="quiz-result-name"></h3>
+          <p id="quiz-result-desc"></p>
+          <span class="price" id="quiz-result-price"></span>
+          <p class="quiz-result-note">Bu bir eğlence testi — hiçbir cevap kaydedilmiyor, gerçek sipariş için mönüden veya iletişim kanallarından devam et.</p>
+          <div class="quiz-result-ctas">
+            <a href="#menu" class="cta ghost">Mönüde Gör</a>
+            <button type="button" class="cta" id="quiz-retry">Tekrar Dene</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="konum">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">Konum</span>
+        <h2>Bizi <em>Bul</em></h2>
+      </div>
+      <div class="konum-grid">
+        <div class="konum-map">
+          <iframe
+            src="https://www.google.com/maps?q=167.+Sokak+No%3A72%2C+Akhisar%2C+Manisa&output=embed"
+            title="Kabasakal Restaurant konum haritası"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <dl class="konum-details">
+          <dt>Adres</dt>
+          <dd>167. Sokak No:72, Akhisar, Manisa</dd>
+          <dt>Saatler</dt>
+          <dd>TODO — abiden çalışma saatleri alınacak</dd>
+          <dt>Yol Tarifi</dt>
+          <dd><a class="cta ghost" href="https://www.google.com/maps/dir/?api=1&destination=167.+Sokak+No%3A72%2C+Akhisar%2C+Manisa" target="_blank" rel="noopener">Yol Tarifi Al</a></dd>
+          <div class="badges">
+            <span class="badge">Paket Servis</span>
+            <span class="badge">Al-Götür</span>
+            <span class="badge">Otopark</span>
+            <span class="badge">Wi-Fi</span>
+            <span class="badge">Açık Teras</span>
+            <span class="badge">Helal</span>
+            <span class="badge">Çay Servisi</span>
+            <span class="badge">Tekerlekli Sandalye Erişimi</span>
+            <span class="badge">Çocuk Menüsü</span>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tasarla">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">Hayalindeki Burger</span>
+        <h2>Kendi <em>Kabasakal'ını</em> Tasarla</h2>
+      </div>
+      <div class="builder">
+        <div class="builder-controls">
+          <fieldset>
+            <legend>Katmanlar</legend>
+            <label class="chip-toggle"><input type="checkbox" data-layer="lettuce" checked> Marul</label>
+            <label class="chip-toggle"><input type="checkbox" data-layer="tomato" checked> Domates</label>
+            <label class="chip-toggle"><input type="checkbox" data-layer="cheese" checked> Peynir</label>
+            <label class="chip-toggle"><input type="checkbox" data-layer="sauce" checked> Özel Sos</label>
+            <label class="chip-toggle"><input type="checkbox" data-layer="double"> Dupleks Köfte</label>
+          </fieldset>
+          <p class="builder-name" aria-live="polite">Bu bir <strong id="builder-name-out">Sade Kabasakal</strong>.</p>
+          <p class="builder-note">Bu sadece eğlenceli bir önizleme — seçimlerin hiçbir yere kaydedilmiyor. Gerçek sipariş için aşağıdaki iletişim kanallarını kullan.</p>
+          <a href="#siparis" class="cta">Bunu Söylemek İçin İletişime Geç</a>
+        </div>
+        <div class="builder-stack" aria-hidden="true">
+          <div class="b-slab b-bun-top"></div>
+          <div class="b-slab b-lettuce" data-layer-el="lettuce"></div>
+          <div class="b-slab b-tomato" data-layer-el="tomato"></div>
+          <div class="b-slab b-cheese" data-layer-el="cheese"></div>
+          <div class="b-slab b-patty"></div>
+          <div class="b-slab b-patty hidden" data-layer-el="double"></div>
+          <div class="b-slab b-sauce" data-layer-el="sauce"></div>
+          <div class="b-slab b-bun-bottom"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="siparis">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">Sipariş</span>
+        <h2>Aç mı <em>Kaldın?</em></h2>
+      </div>
+      <div class="siparis-ctas">
+        <button type="button" class="cta pending" disabled data-todo="phone"><span aria-hidden="true">📞</span> Ara — TODO numara</button>
+        <button type="button" class="cta pending" disabled data-todo="whatsapp"><span aria-hidden="true">💬</span> WhatsApp'tan Yaz — TODO numara</button>
+        <button type="button" class="cta pending" disabled data-todo="paket-platformu"><span aria-hidden="true">🛵</span> Paket Platformundan Sipariş — TODO link</button>
+      </div>
+      <p class="siparis-note">TODO: telefon/WhatsApp numarası ve paket platformu (Yemeksepeti/Getir vb.) linki abiden alınınca yukarıdaki butonlar gerçek linklere bağlanacak.</p>
+    </div>
+  </section>
+
+  <section class="section" id="hikaye">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">Hikaye</span>
+        <h2>Akhisar'dan <em>Çıktı</em></h2>
+      </div>
+      <p>TODO: Kabasakal'ın ve Akhisar bağlantısının hikayesi buraya gelecek — abiyle konuşulup 2-3 paragrafta gerçek anlatı yazılacak. Şimdilik yer tutucu.</p>
+    </div>
+  </section>
+
+  <section class="section" id="geri-bildirim">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">Deneyimin</span>
+        <h2>Nasıl <em>Geçti?</em></h2>
+      </div>
+      <form class="feedback-form" id="feedback-form">
+        <fieldset class="star-rating">
+          <legend>Deneyimini puanla</legend>
+          <input type="radio" id="star5" name="rating" value="5"><label for="star5">5 yıldız</label>
+          <input type="radio" id="star4" name="rating" value="4"><label for="star4">4 yıldız</label>
+          <input type="radio" id="star3" name="rating" value="3"><label for="star3">3 yıldız</label>
+          <input type="radio" id="star2" name="rating" value="2"><label for="star2">2 yıldız</label>
+          <input type="radio" id="star1" name="rating" value="1"><label for="star1">1 yıldız</label>
+        </fieldset>
+
+        <label class="feedback-field">
+          <span>Hangi burgeri yedin? (isteğe bağlı)</span>
+          <select id="feedback-burger">
+            <option value="">Seçmek istemiyorum</option>
+          </select>
+        </label>
+
+        <label class="feedback-field">
+          <span>Eklemek istediğin bir şey var mı? (isteğe bağlı)</span>
+          <textarea id="feedback-comment" rows="3" maxlength="500"></textarea>
+        </label>
+
+        <!-- Honeypot: gerçek kullanıcılar bunu görmez/doldurmaz, botlar genelde doldurur -->
+        <input type="text" name="website" id="feedback-honeypot" class="feedback-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <button type="submit" class="cta" id="feedback-submit">Gönder</button>
+        <p class="feedback-status" id="feedback-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">KABASAKAL<span>.</span></div>
+      <div class="footer-links">
+        <a href="https://instagram.com/kabasakalburger" target="_blank" rel="noopener">Instagram</a>
+        <a href="#konum">Konum</a>
+        <a href="#menu">Mönü</a>
+        <a href="#geri-bildirim">Geri Bildirim</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      167. Sokak No:72, Akhisar, Manisa — Kabasakal Restaurant
+    </div>
+  </footer>
+
+  <div class="end"></div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
