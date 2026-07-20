@@ -302,13 +302,22 @@
     </div>
   </section>
 
-  <section class="section" id="hikaye">
-    <div class="section-inner">
-      <div class="section-head">
-        <span class="eyebrow">07 · Hikaye</span>
-        <h2>Akhisar'dan <em>Çıktı</em></h2>
+  <!-- Fotoğraf-perde bölümü: fotoğraf viewport'a sabitlenir, sayfa üstünden akarken
+       kareler çapraz geçişle değişir. Dükkan/mekan fotoğrafları gelince aşağıdaki üç
+       src'yi değiştirmek yeterli (assets/hikaye/ önerilir), kod değişikliği gerekmez. -->
+  <section class="reveal-section" id="hikaye">
+    <div class="reveal" id="hikaye-reveal">
+      <div class="reveal-media">
+        <img class="reveal-img show" data-step="0" src="assets/menu/kabasakal-burger.jpg" alt="" loading="lazy" decoding="async">
+        <img class="reveal-img" data-step="1" src="assets/menu/citir-tabagi.jpg" alt="" loading="lazy" decoding="async">
+        <img class="reveal-img" data-step="2" src="assets/menu/ayi-burger.jpg" alt="" loading="lazy" decoding="async">
+        <div class="reveal-scrim" aria-hidden="true"></div>
+        <div class="reveal-copy">
+          <span class="eyebrow">07 · Hikaye</span>
+          <h2>Akhisar'dan <em>Çıktı</em></h2>
+          <p>Kabasakal'ın hikâyesi yakında burada. Şimdilik en iyi anlatım tezgâhın başında — gel, közün karşısında dinle.</p>
+        </div>
       </div>
-      <p>Kabasakal'ın hikâyesi yakında burada. Şimdilik en iyi anlatım tezgâhın başında — gel, közün karşısında dinle.</p>
     </div>
   </section>
 
