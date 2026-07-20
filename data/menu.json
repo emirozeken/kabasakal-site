@@ -1,5 +1,5 @@
 {
-  "note": "Kaynak: Yemeksepeti restoran sayfası (kullanıcı ekran görüntüsüyle paylaştı, 2026-07-19). 'Kabasakal Burger' kaynakta 'Kabasakall Burger' (çift L) olarak yazıyordu — muhtemel yazım hatası, restoran ismiyle eşleşen imza ürün olduğu için düzeltildi; abiyle teyit edilmeli. 'tags' alanı benim (Claude) her ürünün gerçek açıklamasındaki malzemelerden çıkardığım, 'Sana Uygun Burger Hangisi?' testinde eşleştirme için kullanılan basit kategoriler — abi isterse değiştirebilir, tat/lezzet iddiası değil sadece malzeme bazlı gruplama. Burger/yan ürün fotoğrafları kullanıcının paylaştığı gerçek fotoğraflar (assets/menu/ altında, kullanıcı tarafından kaydedildi 2026-07-19). İçecekler için gerçek fotoğraf yerine kasıtlı olarak 'icon' alanıyla basit illüstrasyon kullanıldı — rastgele internet stok fotoğrafı telif riski taşıdığı için, kullanıcının onayıyla bu yola gidildi.",
+  "note": "Kaynak: Yemeksepeti restoran sayfası (kullanıcı ekran görüntüsüyle paylaştı, 2026-07-19). 'Kabasakal Burger' kaynakta 'Kabasakall Burger' (çift L) olarak yazıyordu — muhtemel yazım hatası, restoran ismiyle eşleşen imza ürün olduğu için düzeltildi; abiyle teyit edilmeli. 'tags' alanı benim (Claude) her ürünün gerçek açıklamasındaki malzemelerden çıkardığım, 'Sana Uygun Burger Hangisi?' testinde eşleştirme için kullanılan basit kategoriler — abi isterse değiştirebilir, tat/lezzet iddiası değil sadece malzeme bazlı gruplama. Burger/yan ürün fotoğrafları kullanıcının paylaştığı gerçek fotoğraflar (assets/menu/ altında, kullanıcı tarafından kaydedildi 2026-07-19). İçecekler için gerçek fotoğraf yerine kasıtlı olarak 'icon' alanıyla basit illüstrasyon kullanıldı — rastgele internet stok fotoğrafı telif riski taşıdığı için, kullanıcının onayıyla bu yola gidildi. Yan Ürünler de kullanıcının isteğiyle (2026-07-20, 'denemek için') aynı ikon diline geçirildi; 'photo' alanları kasıtlı olarak SİLİNMEDİ — bir üründe hem icon hem photo varsa icon kazanır, fotoğrafa dönmek için o ürünün icon alanını silmek yeterli. AÇIK SORU: 'Triple Mustard Cheese' ile 'Triple Mustard Cheeseburger' aynı ürün mü? Kaynakta ayrı satırlardı, abiden teyit edilmeli — description alanına yazılmıyor çünkü orası ziyaretçiye görünüyor.",
   "categories": [
     {
       "name": "Burgerler",
@@ -12,7 +12,7 @@
         { "name": "Rhino Burger", "price": 550, "description": "180 gr. smash burger köftesi, dana kaburga bacon, trüflü mayonez, acı sos.", "tags": ["gurme","aci","bacon"], "photo": "assets/menu/rhino-triple-mustard-cheeseburger.jpg" },
         { "name": "Red Fox Burger", "price": 500, "description": "150 gr. smash burger köftesi, orman meyveleri, tulum peyniri, trüflü mayonez.", "tags": ["gurme","peynir","tatli"], "photo": "assets/menu/red-fox-burger.jpg" },
         { "name": "Triple Mustard Cheeseburger", "price": 500, "description": "180 gr. smash burger köfte, burger sosu, sweet chili sos, burger turşusu.", "tags": ["tatli-aci"], "photo": "assets/menu/rhino-triple-mustard-cheeseburger.jpg" },
-        { "name": "Triple Mustard Cheese", "price": 500, "description": "180 gr. burger köftesi, burger sosu, sweet chili sos, burger turşusu, 3 adet cheddar peyniri. TODO: bu ürünün 'Triple Mustard Cheeseburger' ile aynı ürün olup olmadığı abiden teyit edilmeli, kaynakta ikisi de ayrı satır olarak listelenmişti.", "tags": ["tatli-aci","peynir"], "photo": "assets/menu/PLACEHOLDER.jpg" },
+        { "name": "Triple Mustard Cheese", "price": 500, "description": "180 gr. burger köftesi, burger sosu, sweet chili sos, burger turşusu, 3 adet cheddar peyniri.", "tags": ["tatli-aci","peynir"], "photo": "assets/menu/PLACEHOLDER.jpg" },
         { "name": "Acı mı Tatlı mı Burger", "price": 375, "description": "130 gr. smash burger köfte, burger peyniri, sweet chili sos, karamelize soğan.", "tags": ["tatli-aci","peynir","sogan"], "photo": "assets/menu/aci-mi-tatli-mi-burger.jpg" },
         { "name": "Mantar Burger", "price": 450, "description": "130 gr. smash burger köftesi, trüflü mayonez, burger peyniri, kaşar.", "tags": ["gurme","peynir"], "photo": "assets/menu/mantar-burger.jpg" },
         { "name": "Kıbrıslı Burger", "price": 475, "description": "130 gr. smash burger köfte, burger peyniri, burger sosu, kızarmış hellim.", "tags": ["farkli","peynir"], "photo": "assets/menu/kibrisli-burger.jpg" },
@@ -23,14 +23,14 @@
     {
       "name": "Yan Ürünler",
       "items": [
-        { "name": "Çıtır Tabağı", "price": 350, "description": "Patates kızartması, 5 adet soğan halkası, 5 adet çıtır tavuk, 5 adet dana bacon.", "popular": true, "photo": "assets/menu/citir-tabagi.jpg" },
-        { "name": "4'lü Kemiksiz Çıtır Tavuk", "price": 150, "description": "4 adet olarak servis edilir.", "popular": true, "photo": "assets/menu/kemiksiz-citir-tavuk.jpg" },
-        { "name": "8'li Kemiksiz Çıtır Tavuk", "price": 280, "description": "8 adet olarak servis edilir.", "photo": "assets/menu/kemiksiz-citir-tavuk.jpg" },
-        { "name": "Patates Kızartması (Küçük Boy)", "price": 100, "description": "Parmak dilim.", "photo": "assets/menu/patates-kizartmasi.jpg" },
-        { "name": "Patates Kızartması (Orta Boy)", "price": 120, "description": "Parmak dilim.", "photo": "assets/menu/patates-kizartmasi.jpg" },
-        { "name": "Patates Kızartması (Büyük Boy)", "price": 150, "description": "Parmak dilim.", "photo": "assets/menu/patates-kizartmasi.jpg" },
-        { "name": "4'lü Soğan Halkası", "price": 60, "description": "4 adet olarak servis edilir.", "photo": "assets/menu/sogan-halkasi.jpg" },
-        { "name": "8'li Soğan Halkası", "price": 100, "description": "8 adet olarak servis edilir.", "photo": "assets/menu/sogan-halkasi.jpg" }
+        { "name": "Çıtır Tabağı", "price": 350, "description": "Patates kızartması, 5 adet soğan halkası, 5 adet çıtır tavuk, 5 adet dana bacon.", "popular": true, "icon": {"shape":"platter","color":"#E8A33D"}, "photo": "assets/menu/citir-tabagi.jpg" },
+        { "name": "4'lü Kemiksiz Çıtır Tavuk", "price": 150, "description": "4 adet olarak servis edilir.", "popular": true, "icon": {"shape":"chicken-4","color":"#E8A33D"}, "photo": "assets/menu/kemiksiz-citir-tavuk.jpg" },
+        { "name": "8'li Kemiksiz Çıtır Tavuk", "price": 280, "description": "8 adet olarak servis edilir.", "icon": {"shape":"chicken-8","color":"#E8A33D"}, "photo": "assets/menu/kemiksiz-citir-tavuk.jpg" },
+        { "name": "Patates Kızartması (Küçük Boy)", "price": 100, "description": "Parmak dilim.", "icon": {"shape":"fries-s","color":"#E8432F"}, "photo": "assets/menu/patates-kizartmasi.jpg" },
+        { "name": "Patates Kızartması (Orta Boy)", "price": 120, "description": "Parmak dilim.", "icon": {"shape":"fries-m","color":"#E8432F"}, "photo": "assets/menu/patates-kizartmasi.jpg" },
+        { "name": "Patates Kızartması (Büyük Boy)", "price": 150, "description": "Parmak dilim.", "icon": {"shape":"fries-l","color":"#E8432F"}, "photo": "assets/menu/patates-kizartmasi.jpg" },
+        { "name": "4'lü Soğan Halkası", "price": 60, "description": "4 adet olarak servis edilir.", "icon": {"shape":"rings-4","color":"#E8A33D"}, "photo": "assets/menu/sogan-halkasi.jpg" },
+        { "name": "8'li Soğan Halkası", "price": 100, "description": "8 adet olarak servis edilir.", "icon": {"shape":"rings-8","color":"#E8A33D"}, "photo": "assets/menu/sogan-halkasi.jpg" }
       ]
     },
     {

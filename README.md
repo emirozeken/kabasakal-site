@@ -66,12 +66,16 @@ Kaydet, sayfayı yenile — değişiklik otomatik görünür.
 
 ## Şu an eksik / TODO (koddan değil, içerikten kaynaklı)
 
-Bunlar brief'te işaretlenmiş açık kalemler, kod hazır ama gerçek veriyi bekliyor:
+Bunlar brief'te işaretlenmiş açık kalemler, kod hazır ama gerçek veriyi bekliyor.
+
+> **Not (2026-07-20):** Site canlıya alındığı için ziyaretçiye görünen sayfa metinlerindeki tüm
+> "TODO / abiden alınacak" dili müşteri diline çevrildi ("çok yakında" vb.) — açık kalemlerin
+> takibi artık YALNIZCA bu README'de. Aşağıdaki liste güncel durumun tek kaynağı.
 
 - [ ] **Gerçek burger fotoğrafları** — scroll-zoom deneyimi CSS gradyan/doku ile "gerçekçileştirildi" ama hâlâ illüstratif; gerçek fotoğraflar gelince katmanlar (`.slab` sınıfları, `css/style.css`) gerçek kesit fotoğraflarıyla değiştirilecek.
-- [ ] **Mönü ürün fotoğrafları** — isim/fiyat/açıklama Yemeksepeti'nden alınıp `data/menu.json`'a işlendi (34 ürün), ama fotoğraflar hâlâ yer tutucu. Yemeksepeti'nin küçük resimleri kalite yetersizliği yüzünden kullanılmadı.
+- [x] **Mönü ürün görselleri** — burgerler gerçek fotoğraf (kullanıcının çektiği, `assets/menu/`); yan ürünler + içecekler kasıtlı olarak illüstrasyon ikon ("denemek için" kullanıcı isteği, 2026-07-20 — geri almak için `data/menu.json`'da ilgili ürünün `icon` alanını silmek yeterli, `photo` alanları duruyor). Tek eksik: "Triple Mustard Cheese" fotoğrafı (PLACEHOLDER).
 - [x] **Karakter/maskot görseli** — `assets/mascot/mascot.png` (hero) + 4 scroll-zoom pozu (`mascot-ekmek/sebze/kofte/sos.png`) kaydedildi ve scroll-zoom aşamalarına bağlandı.
-- [ ] **Maskot görsellerinde Gemini filigranı** — `mascot-sebze.png`, `mascot-kofte.png`, `mascot-sos.png` üzerinde küçük bir Gemini "sparkle" ikonu kalıyor (bel/kemer bölgesinde); bu koddan düzeltilemiyor, en temiz yol Gemini'nin kendisinden filigranı temizletip görselleri yeniden istemek.
+- [x] **Maskot görsellerinde Gemini filigranı** — üç görseldeki (sebze/köfte/sos) "sparkle" filigranı diffusion-inpaint (komşu piksel yayılımı) ile temizlendi, 2026-07-20; piksel + görsel düzeyde doğrulandı.
 - [ ] **Supabase kurulumu** — hem memnuniyet formu (`#geri-bildirim`) hem rezervasyon formu (`#rezervasyon`) kod olarak hazır, ama gerçek bir Supabase projesi + `js/supabase-config.js`'e URL/anon key girilene kadar ikisi de devre dışı kalır (bkz. yukarıdaki kurulum bölümü).
 - [ ] **Çalışma saatleri** — `index.html` içinde `#konum` bölümünde TODO olarak işaretli; `#rezervasyon`'daki 12:00–22:00/30 dk saat aralığı da aynı gerçek bilgiyi bekleyen bir yer tutucu (`js/main.js` → `reservationForm` → `buildTimeSlots`).
 - [ ] **Telefon numarası** — sipariş bölümündeki "Ara" ve "WhatsApp" `<button disabled>` elemanları şu an gerçekten devre dışı (TODO), gerçek numara gelince `index.html`'de `#siparis` bölümünde bu iki `<button>` gerçek `tel:` / `https://wa.me/90...` linkine sahip `<a class="cta">` elemanına çevrilecek, `disabled`/`pending` sınıfı kaldırılacak.

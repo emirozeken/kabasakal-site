@@ -100,7 +100,52 @@
 })();
 
 function drinkIconSVG(shape, color){
+  // Yan-ürün ikonları: adet/boy bilgisi görselin kendisine kodlanıyor (4'lü = 4 halka,
+  // büyük boy = daha dolu kutu) — böylece boyutlar arasında "aynı fotoğraf" tekrarı yerine
+  // her kart gerçekten farklı görünüyor.
+  var fryStick = function(x, h, tilt){
+    return '<rect x="' + x + '" y="' + (78 - h) + '" width="9" height="' + h + '" rx="4" fill="#F7C948"' +
+      (tilt ? ' transform="rotate(' + tilt + ' ' + (x + 4.5) + ' ' + (78 - h) + ')"' : '') + '/>';
+  };
+  var friesBox = function(color, sticks){
+    return sticks +
+      '<path d="M27 72 L73 72 L67 130 L33 130 Z" fill="' + color + '"/>' +
+      '<path d="M27 72 L73 72 L71.5 86 L28.5 86 Z" fill="rgba(0,0,0,.15)"/>' +
+      '<rect x="42" y="95" width="16" height="16" rx="8" fill="rgba(255,255,255,.25)"/>';
+  };
+  var onionRing = function(cx, cy, rx, color){
+    return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + (rx * 0.42) + '" fill="none" stroke="' + color + '" stroke-width="' + (rx * 0.38) + '"/>' +
+      '<ellipse cx="' + cx + '" cy="' + (cy - rx * 0.1) + '" rx="' + (rx * 0.82) + '" ry="' + (rx * 0.3) + '" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2.5"/>';
+  };
+  var nugget = function(cx, cy, r, color){
+    return '<rect x="' + (cx - r) + '" y="' + (cy - r * 0.82) + '" width="' + (r * 2) + '" height="' + (r * 1.64) + '" rx="' + (r * 0.72) + '" fill="' + color + '"/>' +
+      '<circle cx="' + (cx - r * 0.3) + '" cy="' + (cy - r * 0.2) + '" r="1.6" fill="rgba(0,0,0,.18)"/>' +
+      '<circle cx="' + (cx + r * 0.35) + '" cy="' + (cy + r * 0.25) + '" r="1.6" fill="rgba(0,0,0,.18)"/>' +
+      '<circle cx="' + (cx + r * 0.1) + '" cy="' + (cy - r * 0.45) + '" r="1.3" fill="rgba(255,255,255,.3)"/>';
+  };
   var shapes = {
+    'fries-s': friesBox(color, fryStick(34, 22) + fryStick(46, 28) + fryStick(58, 20)),
+    'fries-m': friesBox(color, fryStick(30, 26, -6) + fryStick(41, 34) + fryStick(52, 30) + fryStick(61, 24, 6)),
+    'fries-l': friesBox(color, fryStick(27, 28, -9) + fryStick(36, 38, -4) + fryStick(46, 44) + fryStick(55, 36, 4) + fryStick(63, 27, 9)),
+    'rings-4': onionRing(50, 30, 26, color) + onionRing(50, 60, 26, color) + onionRing(50, 90, 26, color) + onionRing(50, 120, 26, color),
+    'rings-8':
+      onionRing(30, 28, 16, color) + onionRing(70, 28, 16, color) +
+      onionRing(30, 62, 16, color) + onionRing(70, 62, 16, color) +
+      onionRing(30, 96, 16, color) + onionRing(70, 96, 16, color) +
+      onionRing(30, 128, 16, color) + onionRing(70, 128, 16, color),
+    'chicken-4': nugget(32, 40, 15, color) + nugget(69, 46, 15, color) + nugget(34, 92, 15, color) + nugget(66, 98, 15, color),
+    'chicken-8':
+      nugget(28, 24, 11, color) + nugget(70, 28, 11, color) +
+      nugget(30, 58, 11, color) + nugget(72, 62, 11, color) +
+      nugget(28, 92, 11, color) + nugget(70, 96, 11, color) +
+      nugget(32, 124, 11, color) + nugget(68, 126, 11, color),
+    'platter':
+      '<ellipse cx="50" cy="106" rx="46" ry="20" fill="rgba(247,241,230,.16)"/>' +
+      '<ellipse cx="50" cy="103" rx="38" ry="15" fill="rgba(247,241,230,.1)"/>' +
+      fryStick(30, 30, -8) + fryStick(40, 36, -3) +
+      onionRing(66, 74, 15, color) +
+      nugget(30, 96, 11, color) + nugget(56, 100, 11, color) +
+      '<rect x="66" y="92" width="24" height="8" rx="4" fill="#B34328" transform="rotate(-12 78 96)"/>',
     can:
       '<rect x="20" y="15" width="60" height="110" rx="10" fill="' + color + '"/>' +
       '<ellipse cx="50" cy="15" rx="30" ry="8" fill="' + color + '" stroke="rgba(0,0,0,.15)"/>' +
@@ -395,7 +440,19 @@ function drinkIconSVG(shape, color){
   dateInput.min = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
 
   // Placeholder 12:00–22:00 / 30-min window — see .reservation-note; swap once real hours are confirmed.
+  // role="radio" promises radio KEYBOARD behavior too: one tab stop for the whole group (roving
+  // tabindex) and arrow keys to move+select — without it screen-reader users hear "radio button"
+  // but get 20 disconnected tab stops and dead arrow keys.
   (function buildTimeSlots(){
+    function selectSlot(btn){
+      Array.prototype.forEach.call(timeGrid.children, function(b){
+        b.setAttribute('aria-checked', 'false');
+        b.tabIndex = -1;
+      });
+      btn.setAttribute('aria-checked', 'true');
+      btn.tabIndex = 0;
+      selectedTime = btn.textContent;
+    }
     for(var h=12; h<=21; h++){
       [':00', ':30'].forEach(function(min){
         var label = String(h).padStart(2,'0') + min;
@@ -405,14 +462,24 @@ function drinkIconSVG(shape, color){
         btn.textContent = label;
         btn.setAttribute('role', 'radio');
         btn.setAttribute('aria-checked', 'false');
-        btn.addEventListener('click', function(){
-          Array.prototype.forEach.call(timeGrid.children, function(b){ b.setAttribute('aria-checked', 'false'); });
-          this.setAttribute('aria-checked', 'true');
-          selectedTime = this.textContent;
-        });
+        btn.tabIndex = -1;
+        btn.addEventListener('click', function(){ selectSlot(this); });
         timeGrid.appendChild(btn);
       });
     }
+    timeGrid.firstChild.tabIndex = 0;
+    timeGrid.addEventListener('keydown', function(e){
+      var slots = Array.prototype.slice.call(timeGrid.children);
+      var idx = slots.indexOf(document.activeElement);
+      if(idx === -1) return;
+      var next;
+      if(e.key === 'ArrowRight' || e.key === 'ArrowDown'){ next = (idx + 1) % slots.length; }
+      else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ next = (idx - 1 + slots.length) % slots.length; }
+      else return;
+      e.preventDefault();
+      selectSlot(slots[next]);
+      slots[next].focus();
+    });
   })();
 
   var configured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
@@ -477,7 +544,8 @@ function drinkIconSVG(shape, color){
       statusEl.className = 'feedback-status ok';
       statusEl.textContent = 'Teşekkürler! Rezervasyon isteğin alındı, onay için seninle iletişime geçilecek.';
       form.reset();
-      Array.prototype.forEach.call(timeGrid.children, function(b){ b.setAttribute('aria-checked', 'false'); });
+      Array.prototype.forEach.call(timeGrid.children, function(b){ b.setAttribute('aria-checked', 'false'); b.tabIndex = -1; });
+      timeGrid.firstChild.tabIndex = 0;
       selectedTime = null;
     });
   });
