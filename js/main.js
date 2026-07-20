@@ -299,35 +299,6 @@ function drinkIconSVG(shape, color){
   document.addEventListener('click', closeAll);
 })();
 
-(function hikayeReveal(){
-  var app = document.getElementById('app');
-  var reveal = document.getElementById('hikaye-reveal');
-  if(!app || !reveal) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // CSS statik kareyi gösteriyor
-
-  var img = reveal.querySelector('.reveal-img');
-  if(!img) return;
-  var ticking = false;
-
-  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-
-  function update(){
-    ticking = false;
-    // fotoğraf 100vh boyunca yapışık kalıyor; o "yapışık" mesafedeki ilerlemeye göre
-    // tek görüntü yavaşça yakınlaşır (kart kartı dönen bir slayt değil, tek sahne)
-    var start = reveal.offsetTop;
-    var stickyRange = reveal.offsetHeight - app.clientHeight;
-    if(stickyRange < 1) stickyRange = 1;
-    var progress = clamp((app.scrollTop - start) / stickyRange, 0, 1);
-    var scale = 1.12 - progress * 0.12; // 1.12 -> 1.0
-    img.style.transform = 'scale(' + scale.toFixed(4) + ')';
-  }
-  app.addEventListener('scroll', function(){
-    if(!ticking){ requestAnimationFrame(update); ticking = true; }
-  }, {passive:true});
-  update();
-})();
-
 (function mobileNav(){
   var toggle = document.getElementById('nav-toggle');
   var topnav = document.querySelector('.topnav');

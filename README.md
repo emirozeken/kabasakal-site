@@ -82,7 +82,7 @@ Bunlar brief'te işaretlenmiş açık kalemler, kod hazır ama gerçek veriyi be
 - [ ] **Telefon numarası** — sipariş bölümündeki "Ara" ve "WhatsApp" `<button disabled>` elemanları şu an gerçekten devre dışı (TODO), gerçek numara gelince `index.html`'de `#siparis` bölümünde bu iki `<button>` gerçek `tel:` / `https://wa.me/90...` linkine sahip `<a class="cta">` elemanına çevrilecek, `disabled`/`pending` sınıfı kaldırılacak.
 - [ ] **Paket platformu linki** (Yemeksepeti/Getir vb.) — varsa link `#siparis` bölümüne eklenecek, yoksa buton kaldırılacak.
 - [ ] **Hikaye metni** — `#hikaye` bölümü yer tutucu, abiyle konuşulup gerçek anlatı yazılacak.
-- [ ] **Hikaye bölümü dükkan/mekan fotoğrafları** — `#hikaye` artık scroll'a bağlı fotoğraf-perde bölümü (3 kare çapraz geçiş); şimdilik ürün fotoğrafları duruyor, dükkan/mekan/sac başı çekimleri gelince `index.html`'de üç `<img class="reveal-img">` src'sini değiştirmek yeterli (`assets/hikaye/` klasörü önerilir).
+- [x] **Hikaye bölümü dükkan fotoğrafı** — `#hikaye` fotoğraf-perde bölümü: gerçek gece çekimi (`assets/hikaye/dukkan-gece.jpg/webp`, iyileştirilmiş) `position:fixed` + `clip-path:inset(0)` tekniğiyle viewport arkasına sabitleniyor, scroll durmadan önceki/sonraki bölümler üzerinden perde gibi geçiyor (Sereno referansı; `background-attachment:fixed` iOS'ta bozuk olduğu için bilinçli olarak bu teknik seçildi). Daha fazla mekan çekimi gelirse aynı kalıpla ek perde bölümleri açılabilir.
 
 ## Deploy
 

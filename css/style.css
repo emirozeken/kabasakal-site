@@ -436,16 +436,17 @@ img{max-width:100%;display:block;}
 .siparis-ctas{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:8px; }
 .siparis-note{ font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:26px; }
 
-/* Story — fotoğraf-perde (sticky reveal): media viewport'a yapışır, .reveal'ın kalan
-   yüksekliği (160vh - 100vh) boyunca TEK fotoğraf scroll'a bağlı olarak yavaşça
-   yakınlaşır (JS ile doğrudan transform, kare geçişi yok). background-attachment:fixed
-   DEĞİL — o iOS'ta çalışmıyor, sticky her yerde çalışıyor. */
+/* Story — fotoğraf-perde: fotoğraf position:fixed ile viewport'a çakılı durur,
+   .reveal-window'daki clip-path:inset(0) onu yalnızca bu bölümün sınırları içinde
+   gösterir. Scroll hiç durmaz — önceki bölüm kayarken fotoğraf perde gibi açılır,
+   sonraki bölüm üstünü örter. background-attachment:fixed DEĞİL (iOS'ta bozuk),
+   clip-path tekniği her yerde çalışıyor. DİKKAT: .reveal-window'a asla transform
+   verme — verilirse fixed çocuk pencereye bağlanır ve efekt bozulur. */
 .reveal-section{ scroll-margin-top:0; }
-.reveal{ position:relative; height:160vh; }
-.reveal-media{ position:sticky; top:0; height:100vh; height:100dvh; overflow:hidden; background:var(--bg); }
+.reveal-window{ position:relative; height:100vh; height:100dvh; clip-path:inset(0); background:var(--bg); }
+.reveal-fixed{ position:fixed; top:0; left:0; width:100%; height:100vh; height:100dvh; }
 .reveal-img{
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-  transform:scale(1.12);
 }
 .reveal-scrim{
   position:absolute; inset:0;
@@ -548,10 +549,8 @@ footer{ background:var(--bg-3); padding:60px 24px 40px; border-top:1px solid var
 .end{height:6vh;}
 
 @media (prefers-reduced-motion: reduce){
-  .reveal{height:auto;}
-  .reveal-media{position:relative; height:70vh;}
-  .reveal-img{display:none; transition:none;}
-  .reveal-img[data-step="0"]{display:block; opacity:1; transform:none;}
+  .reveal-window{height:70vh; clip-path:none;}
+  .reveal-fixed{position:absolute; inset:0; height:100%;}
   .scrollzoom{height:auto;}
   .sticky{position:relative; height:auto; padding:60px 0;}
   .stack{position:relative; left:auto; transform:translateX(0) !important; margin:0 auto;}

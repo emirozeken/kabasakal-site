@@ -302,16 +302,16 @@
     </div>
   </section>
 
-  <!-- Fotoğraf-perde bölümü: tek fotoğraf viewport'a sabitlenir, sayfa üstünden akarken
-       yavaşça yakınlaşır/uzaklaşır (tek görüntü — kart kartı dönen bir slayt değil).
-       Daha fazla mekan fotoğrafı gelirse ayrı bir .reveal-img eklenip aynı akışa
-       dahil edilebilir; şimdilik kasıtlı olarak tek kare. -->
+  <!-- Fotoğraf-perde bölümü: fotoğraf position:fixed ile viewport'un arkasına sabitlenir,
+       clip-path:inset(0) sayesinde sadece bu bölümün penceresinden görünür. Scroll hiç
+       durmaz — önceki bölüm yukarı kayarken fotoğrafı perde gibi açar, sonraki bölüm
+       üstünü örterek gelir (referans: Sereno sitesi 14-16 sn). Ekstra scroll mesafesi yok. -->
   <section class="reveal-section" id="hikaye">
-    <div class="reveal" id="hikaye-reveal">
-      <div class="reveal-media">
+    <div class="reveal-window">
+      <div class="reveal-fixed">
         <picture>
           <source type="image/webp" srcset="assets/hikaye/dukkan-gece.webp">
-          <img class="reveal-img show" data-step="0" src="assets/hikaye/dukkan-gece.jpg" alt="Akşam vakti Kabasakal Restaurant'ın tabelası ve girişi" loading="lazy" decoding="async">
+          <img class="reveal-img" src="assets/hikaye/dukkan-gece.jpg" alt="Akşam vakti Kabasakal Restaurant'ın tabelası ve girişi" decoding="async">
         </picture>
         <div class="reveal-scrim" aria-hidden="true"></div>
         <div class="reveal-copy">
