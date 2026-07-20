@@ -6,7 +6,7 @@
 <title>Kabasakal Restaurant — Akhisar Smash Burger</title>
 <meta name="description" content="Akhisar'da smash burger. Katman katman, ısırılabilir, iddialı.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,12 +16,13 @@
   <nav class="topnav">
     <span class="brand">KABASAKAL<span>.</span></span>
     <div class="links">
-      <a href="#menu">Mönü</a>
-      <a href="#test">Test</a>
-      <a href="#konum">Konum</a>
-      <a href="#tasarla">Tasarla</a>
-      <a href="#siparis">Sipariş</a>
-      <a href="#hikaye">Hikaye</a>
+      <a href="#menu"><span class="nav-num">01</span> Mönü</a>
+      <a href="#test"><span class="nav-num">02</span> Test</a>
+      <a href="#konum"><span class="nav-num">03</span> Konum</a>
+      <a href="#tasarla"><span class="nav-num">04</span> Tasarla</a>
+      <a href="#rezervasyon"><span class="nav-num">05</span> Rezervasyon</a>
+      <a href="#siparis"><span class="nav-num">06</span> Sipariş</a>
+      <a href="#hikaye"><span class="nav-num">07</span> Hikaye</a>
     </div>
   </nav>
 
@@ -40,6 +41,16 @@
   <section class="scrollzoom" id="scrollzoom">
     <div class="sticky">
       <div class="lens-sheen" aria-hidden="true"></div>
+      <div class="zoom-hud" aria-hidden="true">
+        <div class="hud-temp">
+          <span class="hud-label">Sac Sıcaklığı</span>
+          <span class="hud-value" id="hud-temp-value">24°</span>
+        </div>
+        <dl class="hud-specs">
+          <div><dt>İşlem</dt><dd id="hud-process">Ekmek Hazırlama</dd></div>
+          <div><dt>Katman</dt><dd id="hud-layer">01 / 04</dd></div>
+        </dl>
+      </div>
       <div class="stack" id="stack">
         <div class="slab bun-top"></div>
         <div class="slab lettuce"></div>
@@ -79,6 +90,11 @@
         <div class="fact-pop" id="fact-4" role="note">Bilgi: İyi bir burger sosu tatlı-ekşi-baharatlı dengesi kurar ve katmanları her ısırıkta birbirine bağlar. [Sosun gerçek hikayesiyle güncellenecek]</div>
       </div>
 
+      <img class="scroll-mascot" data-stage="1" data-side="right" src="assets/mascot/mascot-ekmek.png" alt="" aria-hidden="true">
+      <img class="scroll-mascot" data-stage="2" data-side="left" src="assets/mascot/mascot-sebze.png" alt="" aria-hidden="true">
+      <img class="scroll-mascot" data-stage="3" data-side="right" src="assets/mascot/mascot-kofte.png" alt="" aria-hidden="true">
+      <img class="scroll-mascot" data-stage="4" data-side="left" src="assets/mascot/mascot-sos.png" alt="" aria-hidden="true">
+
       <div class="dots" id="dots"></div>
 
       <div class="outro" id="outro">
@@ -92,7 +108,7 @@
   <section class="section" id="menu">
     <div class="section-inner">
       <div class="section-head">
-        <span class="eyebrow">Mönü</span>
+        <span class="eyebrow">01 · Mönü</span>
         <h2>Ürün <em>Yıldız</em> Olur</h2>
       </div>
       <p class="menu-note">TODO: Bazı ürün fotoğrafları (özellikle "Triple Mustard Cheese") hâlâ bekleniyor. Aşağıdaki kartlar <code>data/menu.json</code> dosyasından geliyor — o dosya güncellenince site otomatik güncellenir, kod dokunmaya gerek yok.</p>
@@ -103,7 +119,7 @@
   <section class="section" id="test">
     <div class="section-inner">
       <div class="section-head">
-        <span class="eyebrow">Küçük Bir Test</span>
+        <span class="eyebrow">02 · Küçük Bir Test</span>
         <h2>Sana Uygun <em>Burger</em> Hangisi?</h2>
       </div>
       <div class="quiz" id="quiz">
@@ -128,7 +144,7 @@
   <section class="section" id="konum">
     <div class="section-inner">
       <div class="section-head">
-        <span class="eyebrow">Konum</span>
+        <span class="eyebrow">03 · Konum</span>
         <h2>Bizi <em>Bul</em></h2>
       </div>
       <div class="konum-grid">
@@ -165,7 +181,7 @@
   <section class="section" id="tasarla">
     <div class="section-inner">
       <div class="section-head">
-        <span class="eyebrow">Hayalindeki Burger</span>
+        <span class="eyebrow">04 · Hayalindeki Burger</span>
         <h2>Kendi <em>Kabasakal'ını</em> Tasarla</h2>
       </div>
       <div class="builder">
@@ -196,10 +212,67 @@
     </div>
   </section>
 
+  <section class="section" id="rezervasyon">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="eyebrow">05 · Rezervasyon</span>
+        <h2>Masanı <em>Ayırt</em></h2>
+      </div>
+      <form class="reservation-form" id="reservation-form">
+        <div class="reservation-grid">
+          <label class="feedback-field">
+            <span>Tarih</span>
+            <input type="date" id="res-date" required>
+          </label>
+          <label class="feedback-field">
+            <span>Kişi Sayısı</span>
+            <select id="res-party">
+              <option value="1">1 kişi</option>
+              <option value="2" selected>2 kişi</option>
+              <option value="3">3 kişi</option>
+              <option value="4">4 kişi</option>
+              <option value="5">5 kişi</option>
+              <option value="6">6 kişi</option>
+              <option value="7+">7+ kişi</option>
+            </select>
+          </label>
+        </div>
+
+        <fieldset class="reservation-time">
+          <legend>Saat</legend>
+          <div class="reservation-time-grid" id="res-time-grid" role="radiogroup" aria-label="Rezervasyon saati"></div>
+        </fieldset>
+
+        <div class="reservation-grid">
+          <label class="feedback-field">
+            <span>Ad Soyad</span>
+            <input type="text" id="res-name" autocomplete="name" required>
+          </label>
+          <label class="feedback-field">
+            <span>Telefon</span>
+            <input type="tel" id="res-phone" autocomplete="tel" required>
+          </label>
+        </div>
+
+        <label class="feedback-field">
+          <span>Not (isteğe bağlı)</span>
+          <textarea id="res-note" rows="2" maxlength="300"></textarea>
+        </label>
+
+        <!-- Honeypot: gerçek kullanıcılar bunu görmez/doldurmaz, botlar genelde doldurur -->
+        <input type="text" name="website" id="res-honeypot" class="feedback-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <button type="submit" class="cta" id="res-submit">Rezervasyon İste</button>
+        <p class="feedback-status" id="res-status" role="status" aria-live="polite"></p>
+        <p class="reservation-note">TODO: Saat aralığı (12:00–22:00, 30 dk) yer tutucu — gerçek çalışma saatleri netleşince güncellenecek. Bu bir istek formudur, anında onay değildir; onay için Kabasakal seninle iletişime geçecek.</p>
+      </form>
+    </div>
+  </section>
+
   <section class="section" id="siparis">
     <div class="section-inner">
       <div class="section-head">
-        <span class="eyebrow">Sipariş</span>
+        <span class="eyebrow">06 · Sipariş</span>
         <h2>Aç mı <em>Kaldın?</em></h2>
       </div>
       <div class="siparis-ctas">
@@ -214,7 +287,7 @@
   <section class="section" id="hikaye">
     <div class="section-inner">
       <div class="section-head">
-        <span class="eyebrow">Hikaye</span>
+        <span class="eyebrow">07 · Hikaye</span>
         <h2>Akhisar'dan <em>Çıktı</em></h2>
       </div>
       <p>TODO: Kabasakal'ın ve Akhisar bağlantısının hikayesi buraya gelecek — abiyle konuşulup 2-3 paragrafta gerçek anlatı yazılacak. Şimdilik yer tutucu.</p>

@@ -3,6 +3,7 @@
   var scrollzoom = document.getElementById('scrollzoom');
   var stack = document.getElementById('stack');
   var captions = Array.prototype.slice.call(document.querySelectorAll('.caption'));
+  var scrollMascots = Array.prototype.slice.call(document.querySelectorAll('.scroll-mascot'));
   var outro = document.getElementById('outro');
   var scrollhintEl = document.getElementById('scrollhint');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -34,6 +35,17 @@
   for(var i=0;i<stages.length;i++){ dotsWrap.appendChild(document.createElement('i')); }
   var dotEls = dotsWrap.children;
 
+  // HUD readout — one value per camera keyframe (same length/order as `stages` above), telling a
+  // real temperature story: prep stays cool, spikes hard at the smash/sear stage, then cools as
+  // the sauce goes on and the plate is served. Purely atmospheric (aria-hidden), so no fallback
+  // is needed for browsers/users that never see it (hidden under reduced-motion via CSS already).
+  var hudTempEl = document.getElementById('hud-temp-value');
+  var hudProcessEl = document.getElementById('hud-process');
+  var hudLayerEl = document.getElementById('hud-layer');
+  var hudTemps = [22, 24, 26, 232, 140, 62];
+  var hudProcessLabels = ['Hazırlık', 'Ekmek Hazırlama', 'Sebze Hazırlama', 'Smash & Sear', 'Sos & Servis', 'Servise Hazır'];
+  var hudLayerLabels = ['—', '01 / 04', '02 / 04', '03 / 04', '04 / 04', 'Tamam'];
+
   function lerp(a,b,t){ return a+(b-a)*t; }
   function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
   function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
@@ -64,9 +76,20 @@
       var stageIdx = parseInt(el.getAttribute('data-stage'),10);
       el.classList.toggle('show', Math.abs(stageFloat - stageIdx) < 0.42);
     });
+    scrollMascots.forEach(function(el){
+      var stageIdx = parseInt(el.getAttribute('data-stage'),10);
+      el.classList.toggle('show', Math.abs(stageFloat - stageIdx) < 0.42);
+    });
     if(outro) outro.classList.toggle('show', stageFloat > 4.55);
     if(scrollhintEl) scrollhintEl.style.opacity = app.scrollTop > 20 ? 0 : 1;
     for(var i=0;i<dotEls.length;i++){ dotEls[i].classList.toggle('active', i===Math.round(stageFloat)); }
+
+    if(hudTempEl){
+      var nearest = clamp(Math.round(stageFloat), 0, hudProcessLabels.length-1);
+      hudTempEl.textContent = Math.round(lerp(hudTemps[idx], hudTemps[idx+1], t)) + '°';
+      hudProcessEl.textContent = hudProcessLabels[nearest];
+      hudLayerEl.textContent = hudLayerLabels[nearest];
+    }
   }
 
   function onScroll(){ if(!ticking){ requestAnimationFrame(update); ticking = true; } }
@@ -199,92 +222,6 @@ function drinkIconSVG(shape, color){
   }, { root: app, threshold: 0.4 });
 
   sections.forEach(function(s){ observer.observe(s); });
-})();
-
-(function menuTilt(){
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = window.matchMedia('(pointer: fine)').matches;
-  if(reduced || !finePointer) return;
-
-  var grid = document.getElementById('menu-grid');
-  if(!grid) return;
-  var current = null;
-
-  function reset(card){ card.style.transform = ''; }
-
-  grid.addEventListener('mousemove', function(e){
-    var card = e.target.closest('.menu-card');
-    if(!card){
-      if(current){ reset(current); current = null; }
-      return;
-    }
-    if(current && current !== card) reset(current);
-    current = card;
-    var r = card.getBoundingClientRect();
-    var px = (e.clientX - r.left) / r.width;
-    var py = (e.clientY - r.top) / r.height;
-    var rotY = (px - 0.5) * 14;
-    var rotX = (0.5 - py) * 14;
-    card.style.transform = 'perspective(700px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) scale(1.03)';
-  });
-  grid.addEventListener('mouseleave', function(){
-    if(current){ reset(current); current = null; }
-  });
-})();
-
-(function magneticButtons(){
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = window.matchMedia('(pointer: fine)').matches;
-  if(reduced || !finePointer) return;
-
-  document.querySelectorAll('.cta:not([disabled])').forEach(function(btn){
-    btn.addEventListener('mousemove', function(e){
-      var r = btn.getBoundingClientRect();
-      var relX = e.clientX - (r.left + r.width / 2);
-      var relY = e.clientY - (r.top + r.height / 2);
-      var pull = 0.25, max = 10;
-      var tx = Math.max(-max, Math.min(max, relX * pull));
-      var ty = Math.max(-max, Math.min(max, relY * pull));
-      btn.style.transform = 'translate(' + tx + 'px,' + (ty - 2) + 'px)';
-    });
-    btn.addEventListener('mouseleave', function(){
-      btn.style.transform = '';
-    });
-  });
-})();
-
-(function customCursor(){
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = window.matchMedia('(pointer: fine)').matches;
-  if(reduced || !finePointer) return;
-
-  var dot = document.createElement('div'); dot.className = 'cursor-dot';
-  var ring = document.createElement('div'); ring.className = 'cursor-ring';
-  document.body.appendChild(dot);
-  document.body.appendChild(ring);
-  document.body.classList.add('has-custom-cursor');
-
-  var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-  document.addEventListener('mousemove', function(e){
-    mouseX = e.clientX; mouseY = e.clientY;
-    dot.style.transform = 'translate(' + mouseX + 'px,' + mouseY + 'px) translate(-50%,-50%)';
-  });
-
-  function loop(){
-    ringX += (mouseX - ringX) * 0.18;
-    ringY += (mouseY - ringY) * 0.18;
-    ring.style.transform = 'translate(' + ringX + 'px,' + ringY + 'px) translate(-50%,-50%)';
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
-
-  var hoverSelector = 'a, button:not([disabled]), .menu-card, label.chip-toggle';
-  document.addEventListener('mouseover', function(e){
-    if(e.target.closest(hoverSelector)) ring.classList.add('hover');
-  });
-  document.addEventListener('mouseout', function(e){
-    if(e.target.closest(hoverSelector)) ring.classList.remove('hover');
-  });
 })();
 
 (function mascotFallback(){
@@ -440,6 +377,110 @@ function drinkIconSVG(shape, color){
   });
 
   renderQuestion();
+})();
+
+(function reservationForm(){
+  var form = document.getElementById('reservation-form');
+  if(!form) return;
+
+  var dateInput = document.getElementById('res-date');
+  var timeGrid = document.getElementById('res-time-grid');
+  var submitBtn = document.getElementById('res-submit');
+  var statusEl = document.getElementById('res-status');
+  var honeypot = document.getElementById('res-honeypot');
+  var selectedTime = null;
+
+  // Today's date as the floor for the picker — no reservation requests for a date that's already passed.
+  var today = new Date();
+  dateInput.min = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+
+  // Placeholder 12:00–22:00 / 30-min window — see .reservation-note; swap once real hours are confirmed.
+  (function buildTimeSlots(){
+    for(var h=12; h<=21; h++){
+      [':00', ':30'].forEach(function(min){
+        var label = String(h).padStart(2,'0') + min;
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'time-slot';
+        btn.textContent = label;
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', 'false');
+        btn.addEventListener('click', function(){
+          Array.prototype.forEach.call(timeGrid.children, function(b){ b.setAttribute('aria-checked', 'false'); });
+          this.setAttribute('aria-checked', 'true');
+          selectedTime = this.textContent;
+        });
+        timeGrid.appendChild(btn);
+      });
+    }
+  })();
+
+  var configured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
+    window.SUPABASE_URL.indexOf('TODO') !== 0 && window.SUPABASE_ANON_KEY.indexOf('TODO') !== 0;
+
+  if(!configured){
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Bu form henüz aktif değil — Supabase bağlantısı bekleniyor.';
+    return;
+  }
+
+  var client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    if(honeypot.value){
+      statusEl.className = 'feedback-status ok';
+      statusEl.textContent = 'Teşekkürler! Rezervasyon isteğin alındı.';
+      form.reset();
+      return;
+    }
+
+    if(!dateInput.value){
+      statusEl.className = 'feedback-status error';
+      statusEl.textContent = 'Lütfen bir tarih seç.';
+      return;
+    }
+    if(!selectedTime){
+      statusEl.className = 'feedback-status error';
+      statusEl.textContent = 'Lütfen bir saat seç.';
+      return;
+    }
+    var name = document.getElementById('res-name').value.trim();
+    var phone = document.getElementById('res-phone').value.trim();
+    if(!name || !phone){
+      statusEl.className = 'feedback-status error';
+      statusEl.textContent = 'Ad soyad ve telefon gerekli.';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    statusEl.className = 'feedback-status';
+    statusEl.textContent = 'Gönderiliyor…';
+
+    client.from('reservations').insert({
+      name: name,
+      phone: phone,
+      party_size: document.getElementById('res-party').value,
+      res_date: dateInput.value,
+      res_time: selectedTime,
+      note: document.getElementById('res-note').value || null,
+      honeypot: honeypot.value || null
+    }).then(function(result){
+      submitBtn.disabled = false;
+      if(result.error){
+        statusEl.className = 'feedback-status error';
+        statusEl.textContent = 'Gönderilemedi, tekrar dener misin?';
+        console.error(result.error);
+        return;
+      }
+      statusEl.className = 'feedback-status ok';
+      statusEl.textContent = 'Teşekkürler! Rezervasyon isteğin alındı, onay için seninle iletişime geçilecek.';
+      form.reset();
+      Array.prototype.forEach.call(timeGrid.children, function(b){ b.setAttribute('aria-checked', 'false'); });
+      selectedTime = null;
+    });
+  });
 })();
 
 (function feedbackForm(){
