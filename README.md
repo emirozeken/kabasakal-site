@@ -20,7 +20,7 @@ sonra `http://localhost:8000` (ya da serve'un verdiği adres) açılır.
 
 - `index.html` — tüm sayfa (hero, scroll-zoom, mönü, test, konum, "Tasarla" burger builder, rezervasyon, sipariş, hikaye, geri bildirim, footer)
 - `css/style.css` — tüm stiller
-- `js/main.js` — scroll-zoom mekaniği (canlı HUD sıcaklık/işlem okuması dahil), mönü render mantığı, scroll ilerleme çubuğu + nav vurgusu, fact popover'lar, burger builder mantığı, quiz mantığı, rezervasyon formu mantığı, geri bildirim formu mantığı
+- `js/main.js` — scroll-zoom mekaniği (canlı HUD sıcaklık/işlem okuması, outro'da sahne kararması dahil), mönü render + kategori atlama çipleri + yemek/içecek ikon sistemi, scroll ilerleme çubuğu + nav vurgusu, fact popover'lar, burger builder mantığı, quiz mantığı (sonuçtan mönüdeki tam karta "spotlight" atlama dahil), rezervasyon formu mantığı, geri bildirim formu mantığı
 - `js/supabase-config.js` — Supabase proje URL + anon key (kurulana kadar TODO placeholder)
 - `data/menu.json` — mönü verisi, **kod bilmeden düzenlenebilir**
 - `supabase/schema.sql` — `feedback` ve `reservations` tabloları + RLS kuralları, Supabase SQL Editor'e yapıştırılacak

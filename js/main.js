@@ -5,6 +5,7 @@
   var captions = Array.prototype.slice.call(document.querySelectorAll('.caption'));
   var scrollMascots = Array.prototype.slice.call(document.querySelectorAll('.scroll-mascot'));
   var outro = document.getElementById('outro');
+  var stickyEl = scrollzoom.querySelector('.sticky');
   var scrollhintEl = document.getElementById('scrollhint');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -86,10 +87,13 @@
 
     if(hudTempEl){
       var nearest = clamp(Math.round(stageFloat), 0, hudProcessLabels.length-1);
-      hudTempEl.textContent = Math.round(lerp(hudTemps[idx], hudTemps[idx+1], t)) + '°';
+      var temp = Math.round(lerp(hudTemps[idx], hudTemps[idx+1], t));
+      hudTempEl.textContent = temp + '°';
+      hudTempEl.classList.toggle('hot', temp >= 180);
       hudProcessEl.textContent = hudProcessLabels[nearest];
       hudLayerEl.textContent = hudLayerLabels[nearest];
     }
+    if(stickyEl) stickyEl.classList.toggle('outro-active', stageFloat > 4.55);
   }
 
   function onScroll(){ if(!ticking){ requestAnimationFrame(update); ticking = true; } }
@@ -117,11 +121,23 @@ function drinkIconSVG(shape, color){
     return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + (rx * 0.42) + '" fill="none" stroke="' + color + '" stroke-width="' + (rx * 0.38) + '"/>' +
       '<ellipse cx="' + cx + '" cy="' + (cy - rx * 0.1) + '" rx="' + (rx * 0.82) + '" ry="' + (rx * 0.3) + '" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2.5"/>';
   };
-  var nugget = function(cx, cy, r, color){
-    return '<rect x="' + (cx - r) + '" y="' + (cy - r * 0.82) + '" width="' + (r * 2) + '" height="' + (r * 1.64) + '" rx="' + (r * 0.72) + '" fill="' + color + '"/>' +
-      '<circle cx="' + (cx - r * 0.3) + '" cy="' + (cy - r * 0.2) + '" r="1.6" fill="rgba(0,0,0,.18)"/>' +
-      '<circle cx="' + (cx + r * 0.35) + '" cy="' + (cy + r * 0.25) + '" r="1.6" fill="rgba(0,0,0,.18)"/>' +
-      '<circle cx="' + (cx + r * 0.1) + '" cy="' + (cy - r * 0.45) + '" r="1.3" fill="rgba(255,255,255,.3)"/>';
+  // Elongated tender/strip built from overlapping circles along an axis — the bumpy
+  // "caterpillar" silhouette reads as crispy breading, unlike a smooth rounded rect.
+  var strip = function(cx, cy, len, r, angle, color){
+    var rad = angle * Math.PI / 180;
+    var dx = Math.cos(rad), dy = Math.sin(rad);
+    var out = '';
+    var n = 5;
+    for(var i = 0; i < n; i++){
+      var t = (i / (n - 1) - 0.5) * len;
+      // radius varies per lump so the outline is irregular, not tube-smooth
+      var rr = r * (i % 2 === 0 ? 1 : 0.86);
+      out += '<circle cx="' + (cx + dx * t).toFixed(1) + '" cy="' + (cy + dy * t).toFixed(1) + '" r="' + rr.toFixed(1) + '" fill="' + color + '"/>';
+    }
+    out += '<circle cx="' + (cx - dx * len * 0.22).toFixed(1) + '" cy="' + (cy - dy * len * 0.22 - r * 0.45).toFixed(1) + '" r="1.5" fill="rgba(0,0,0,.2)"/>' +
+      '<circle cx="' + (cx + dx * len * 0.18).toFixed(1) + '" cy="' + (cy + dy * len * 0.18 + r * 0.35).toFixed(1) + '" r="1.5" fill="rgba(0,0,0,.2)"/>' +
+      '<circle cx="' + (cx + dx * len * 0.3).toFixed(1) + '" cy="' + (cy + dy * len * 0.3 - r * 0.3).toFixed(1) + '" r="1.3" fill="rgba(255,255,255,.3)"/>';
+    return out;
   };
   var shapes = {
     'fries-s': friesBox(color, fryStick(34, 22) + fryStick(46, 28) + fryStick(58, 20)),
@@ -133,18 +149,19 @@ function drinkIconSVG(shape, color){
       onionRing(30, 62, 16, color) + onionRing(70, 62, 16, color) +
       onionRing(30, 96, 16, color) + onionRing(70, 96, 16, color) +
       onionRing(30, 128, 16, color) + onionRing(70, 128, 16, color),
-    'chicken-4': nugget(32, 40, 15, color) + nugget(69, 46, 15, color) + nugget(34, 92, 15, color) + nugget(66, 98, 15, color),
+    'chicken-4':
+      strip(30, 40, 52, 10, 80, color) + strip(62, 44, 56, 10, 96, color) +
+      strip(36, 106, 54, 10, 84, color) + strip(70, 102, 50, 10, 100, color),
     'chicken-8':
-      nugget(28, 24, 11, color) + nugget(70, 28, 11, color) +
-      nugget(30, 58, 11, color) + nugget(72, 62, 11, color) +
-      nugget(28, 92, 11, color) + nugget(70, 96, 11, color) +
-      nugget(32, 124, 11, color) + nugget(68, 126, 11, color),
+      strip(22, 30, 36, 7, 78, color) + strip(48, 34, 40, 7, 95, color) + strip(76, 28, 36, 7, 84, color) +
+      strip(24, 78, 38, 7, 92, color) + strip(52, 82, 36, 7, 80, color) + strip(78, 76, 40, 7, 98, color) +
+      strip(34, 122, 38, 7, 86, color) + strip(66, 124, 36, 7, 94, color),
     'platter':
       '<ellipse cx="50" cy="106" rx="46" ry="20" fill="rgba(247,241,230,.16)"/>' +
       '<ellipse cx="50" cy="103" rx="38" ry="15" fill="rgba(247,241,230,.1)"/>' +
       fryStick(30, 30, -8) + fryStick(40, 36, -3) +
       onionRing(66, 74, 15, color) +
-      nugget(30, 96, 11, color) + nugget(56, 100, 11, color) +
+      strip(32, 98, 34, 7, 12, color) + strip(56, 106, 32, 7, -8, color) +
       '<rect x="66" y="92" width="24" height="8" rx="4" fill="#B34328" transform="rotate(-12 78 96)"/>',
     can:
       '<rect x="20" y="15" width="60" height="110" rx="10" fill="' + color + '"/>' +
@@ -174,15 +191,43 @@ function drinkIconSVG(shape, color){
     .then(function(res){ return res.json(); })
     .then(function(data){
       grid.innerHTML = '';
+
+      // Kategori atlama çipleri: 34 ürünlük tek grid'de içeceklere ulaşmak için tüm
+      // burgerleri kaydırmak gerekiyordu — çipler doğrudan kategori başlığına götürür.
+      var slugify = function(s){
+        // Türkçe büyük harfler ÖNCE dönüştürülüyor: 'İ'.toLowerCase() 'i'+U+0307 (combining
+        // dot) üretir ve slug'da fazladan tire bırakır ("i-cecekler")
+        return s.replace(/İ/g,'i').replace(/I/g,'i').replace(/Ğ/g,'g').replace(/Ü/g,'u')
+          .replace(/Ş/g,'s').replace(/Ö/g,'o').replace(/Ç/g,'c')
+          .toLowerCase()
+          .replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s')
+          .replace(/ı/g,'i').replace(/ö/g,'o').replace(/ç/g,'c')
+          .replace(/[^a-z0-9]+/g,'-');
+      };
+      var catNav = document.createElement('nav');
+      catNav.className = 'menu-cat-nav';
+      catNav.setAttribute('aria-label', 'Mönü kategorileri');
+      data.categories.forEach(function(cat){
+        var chip = document.createElement('a');
+        chip.className = 'menu-cat-chip';
+        chip.href = '#cat-' + slugify(cat.name);
+        chip.textContent = cat.name;
+        catNav.appendChild(chip);
+      });
+      grid.parentNode.insertBefore(catNav, grid);
+
       data.categories.forEach(function(cat){
         var heading = document.createElement('h3');
         heading.className = 'menu-category';
+        heading.id = 'cat-' + slugify(cat.name);
         heading.textContent = cat.name;
         grid.appendChild(heading);
 
         cat.items.forEach(function(item){
           var card = document.createElement('article');
           card.className = 'menu-card';
+          // exact-name key so the quiz result can scroll straight to its recommended burger
+          card.setAttribute('data-item-name', item.name);
 
           var photo = document.createElement('div');
           photo.className = 'photo';
@@ -410,6 +455,30 @@ function drinkIconSVG(shape, color){
       document.getElementById('quiz-result-name').textContent = winner.name;
       document.getElementById('quiz-result-desc').textContent = winner.description;
       document.getElementById('quiz-result-price').textContent = winner.price ? winner.price + ' ₺' : '';
+      var gotoBtn = document.getElementById('quiz-goto-menu');
+      if(gotoBtn) gotoBtn.setAttribute('data-target-item', winner.name);
+      // move focus to the result so keyboard/screen-reader users land on their answer,
+      // not on a silently-swapped DOM
+      var nameEl = document.getElementById('quiz-result-name');
+      nameEl.setAttribute('tabindex', '-1');
+      nameEl.focus();
+    });
+  }
+
+  // "Mönüde Gör" scrolls to the exact recommended card and spotlights it — without this the
+  // visitor lands at the top of a 34-item grid and has to re-find their own recommendation.
+  var gotoMenuBtn = document.getElementById('quiz-goto-menu');
+  if(gotoMenuBtn){
+    gotoMenuBtn.addEventListener('click', function(e){
+      var name = this.getAttribute('data-target-item');
+      if(!name) return; // no data yet → default #menu anchor behavior
+      var card = document.querySelector('.menu-card[data-item-name="' + name.replace(/"/g, '\\"') + '"]');
+      if(!card) return;
+      e.preventDefault();
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.querySelectorAll('.menu-card.spotlight').forEach(function(c){ c.classList.remove('spotlight'); });
+      card.classList.add('spotlight');
+      setTimeout(function(){ card.classList.remove('spotlight'); }, 4000);
     });
   }
 
@@ -419,6 +488,8 @@ function drinkIconSVG(shape, color){
     resultEl.hidden = true;
     questionsWrap.hidden = false;
     renderQuestion();
+    var firstOpt = questionsWrap.querySelector('.quiz-option');
+    if(firstOpt) firstOpt.focus();
   });
 
   renderQuestion();
