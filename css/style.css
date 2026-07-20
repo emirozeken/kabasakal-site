@@ -25,7 +25,9 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--cream);font-family
 a{color:inherit;}
 img{max-width:100%;display:block;}
 
-#app{ position:relative; height:100vh; width:100%; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; }
+/* 100dvh (ikinci satır): mobilde adres çubuğu gizlenip açılırken 100vh zıplar/taşar,
+   dinamik viewport birimi bunu çözer — desteklemeyen eski tarayıcı ilk satırda kalır */
+#app{ position:relative; height:100vh; height:100dvh; width:100%; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; }
 
 /* Ambient vignette — fixed (not scrolling with #app content), purely atmospheric read-only
    darkening at the edges so every section shares one "lit from the center" mood instead of
@@ -54,7 +56,19 @@ img{max-width:100%;display:block;}
    small text (the original .32 measured ≈2.8:1, failing even the 3:1 UI-component bar). */
 .topnav .links .nav-num{color:rgba(247,241,230,.55);}
 .topnav .links a.active .nav-num{color:var(--sauce);}
-@media (max-width:640px){ .topnav .links{display:none;} }
+/* Hamburger yalnızca dar ekranda; açılınca linkler tam genişlik panel olarak iner.
+   QR ile masadan gelen müşterinin birincil cihazı telefon — nav'sız bırakılamaz. */
+.nav-toggle{ display:none; background:transparent; border:1px solid var(--line); border-radius:8px; color:var(--cream); font-size:18px; line-height:1; padding:8px 12px; cursor:pointer; }
+.nav-toggle:focus-visible{ outline:3px solid var(--cheese); outline-offset:2px; }
+@media (max-width:640px){
+  .nav-toggle{ display:block; }
+  .topnav{ flex-wrap:wrap; background:rgba(23,19,16,.92); }
+  .topnav .links{ display:none; width:100%; flex-direction:column; gap:0; padding-top:12px; }
+  .topnav.open .links{ display:flex; }
+  .topnav .links a{ padding:13px 4px; border-bottom:1px solid var(--line); font-size:13px; }
+  .topnav .links a:last-child{ border-bottom:none; }
+  .topnav .links a.active{ border-bottom-color:var(--line); }
+}
 
 .progressbar{ position:fixed; top:0; left:0; height:3px; width:0%; background:var(--sauce); z-index:60; }
 
@@ -69,7 +83,7 @@ img{max-width:100%;display:block;}
 
 /* Hero */
 .hero{
-  height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  height:100vh; height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center; padding:0 24px; position:relative; overflow:hidden;
   background:radial-gradient(ellipse at 50% 30%, var(--bg-2), var(--bg) 70%);
 }
@@ -98,6 +112,9 @@ img{max-width:100%;display:block;}
 @keyframes searShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
 @media (prefers-reduced-motion: reduce){ .hero h1 em, .outro .word em, .section-head h2 em{animation:none;} }
 .hero p{ font-family:var(--body); font-weight:500; font-size:clamp(14px,2vw,18px); color:rgba(247,241,230,.7); max-width:480px; margin:22px 0 0; }
+/* QR ile masadan gelen müşteri mönüyü tek dokunuşta ister — 900vh'lik deneyimi
+   atlamanın görünür bir yolu şart (skip-link yalnız klavye kullanıcısına görünüyor) */
+.hero-ctas{ margin-top:28px; }
 .scrollhint{ position:absolute; bottom:36px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:8px; transition:opacity .3s; }
 .scrollhint .arrow{animation:bob 1.6s ease-in-out infinite;}
 @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
@@ -129,7 +146,7 @@ img{max-width:100%;display:block;}
 /* Scroll-zoom experience */
 /* Taller = more scroll distance per stage = the zoom feels slower/more "playable" instead of snapping by */
 .scrollzoom{ position:relative; height:900vh; }
-.sticky{ position:sticky; top:0; height:100vh; overflow:hidden; }
+.sticky{ position:sticky; top:0; height:100vh; height:100dvh; overflow:hidden; }
 
 /* transition kasıtlı olarak SADECE opacity/filter — transform her frame JS'ten geliyor,
    transition'a girerse scroll'la yarışıp lag üretir */
@@ -365,7 +382,8 @@ img{max-width:100%;display:block;}
 }
 @keyframes spotlightPulse{0%,100%{box-shadow:0 0 0 3px rgba(255,78,46,.35), 0 12px 40px rgba(255,78,46,.25);}50%{box-shadow:0 0 0 6px rgba(255,78,46,.5), 0 12px 48px rgba(255,78,46,.4);}}
 @media (prefers-reduced-motion: reduce){ .menu-card.spotlight{animation:none;} }
-.menu-card .photo{ position:relative; aspect-ratio:4/3; background:var(--bg-2) center/cover no-repeat; display:flex; align-items:center; justify-content:center; }
+.menu-card .photo{ position:relative; aspect-ratio:4/3; background:var(--bg-2); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.menu-card .photo > img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .menu-card .popular-badge{
   position:absolute; top:10px; left:10px; font-family:var(--mono); font-size:10px;
   text-transform:uppercase; letter-spacing:.06em; color:var(--bg); background:var(--insta-orange);
@@ -429,7 +447,8 @@ img{max-width:100%;display:block;}
 .star-rating{ border:none; padding:0; margin:0; display:flex; flex-direction:row-reverse; justify-content:center; gap:6px; }
 .star-rating legend{ font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--cheese); margin-bottom:12px; width:100%; text-align:center; }
 .star-rating input{ position:absolute; opacity:0; width:1px; height:1px; overflow:hidden; }
-.star-rating label{ font-size:32px; line-height:1; color:var(--line); cursor:pointer; transition:color .1s; }
+/* padding ile dokunma alanı ~44px'e çıkıyor (WCAG hedef boyutu) — görsel yıldız 32px kalıyor */
+.star-rating label{ font-size:32px; line-height:1; color:var(--line); cursor:pointer; transition:color .1s; padding:6px; }
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label{ color:var(--cheese); }

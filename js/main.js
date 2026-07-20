@@ -235,7 +235,15 @@ function drinkIconSVG(shape, color){
             photo.classList.add('icon');
             photo.innerHTML = drinkIconSVG(item.icon.shape, item.icon.color);
           } else if(item.photo && item.photo.indexOf('PLACEHOLDER') === -1){
-            photo.style.backgroundImage = "url('" + item.photo + "')";
+            // gerçek <img> (background-image değil) → tarayıcı lazy-load edebiliyor;
+            // 14 fotoğraf ilk açılışta değil, mönüye yaklaşınca iniyor. alt boş çünkü
+            // ürün adı hemen altındaki h4'te — tekrar okutmamak için.
+            var pimg = document.createElement('img');
+            pimg.src = item.photo;
+            pimg.alt = '';
+            pimg.loading = 'lazy';
+            pimg.decoding = 'async';
+            photo.appendChild(pimg);
           } else {
             var ph = document.createElement('span');
             ph.className = 'placeholder';
@@ -289,6 +297,28 @@ function drinkIconSVG(shape, color){
   });
 
   document.addEventListener('click', closeAll);
+})();
+
+(function mobileNav(){
+  var toggle = document.getElementById('nav-toggle');
+  var topnav = document.querySelector('.topnav');
+  if(!toggle || !topnav) return;
+
+  function setOpen(open){
+    topnav.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Menüyü kapat' : 'Menüyü aç');
+  }
+  toggle.addEventListener('click', function(){
+    setOpen(!topnav.classList.contains('open'));
+  });
+  // bir bölüme gidilince panel kapanır — açık panelin altında gezinmek istemez kimse
+  topnav.querySelectorAll('.links a').forEach(function(a){
+    a.addEventListener('click', function(){ setOpen(false); });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && topnav.classList.contains('open')){ setOpen(false); toggle.focus(); }
+  });
 })();
 
 (function navHighlight(){

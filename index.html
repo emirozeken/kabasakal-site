@@ -27,7 +27,8 @@
   <div class="progressbar" id="progressbar"></div>
   <nav class="topnav">
     <span class="brand">KABASAKAL<span>.</span></span>
-    <div class="links">
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menüyü aç"><span aria-hidden="true">☰</span></button>
+    <div class="links" id="nav-links">
       <a href="#menu"><span class="nav-num">01</span> Mönü</a>
       <a href="#test"><span class="nav-num">02</span> Test</a>
       <a href="#konum"><span class="nav-num">03</span> Konum</a>
@@ -42,10 +43,16 @@
     <span class="eyebrow">Akhisar · Smash Burger</span>
     <h1>KABASAKAL<br><em>KATMAN KATMAN</em></h1>
     <p>Sıradan bir mönü sayfası değil — burgerin içine girdiğin bir yolculuk. Aşağı kaydır.</p>
+    <div class="hero-ctas">
+      <a class="cta ghost" href="#menu">Doğrudan Mönüye Git</a>
+    </div>
     <div class="scrollhint" id="scrollhint"><span>Kaydır</span><span class="arrow">↓</span></div>
     <div class="mascot">
       <span class="bubble" aria-hidden="true">Hoş geldin! 👋</span>
-      <img src="assets/mascot/mascot.png" alt="Elinde Kabasakal burgeri tutarak gülümseyen karakter">
+      <picture>
+        <source type="image/webp" srcset="assets/mascot/mascot.webp">
+        <img src="assets/mascot/mascot.png" alt="Elinde Kabasakal burgeri tutarak gülümseyen karakter">
+      </picture>
       <div class="placeholder-box">Karakter görseli bekleniyor<br>assets/mascot/mascot.png</div>
     </div>
   </section>
@@ -102,10 +109,10 @@
         <div class="fact-pop" id="fact-4" role="note">Bilgi: İyi bir burger sosu tatlı-ekşi-baharatlı dengesi kurar ve katmanları her ısırıkta birbirine bağlar. [Sosun gerçek hikayesiyle güncellenecek]</div>
       </div>
 
-      <img class="scroll-mascot" data-stage="1" data-side="right" src="assets/mascot/mascot-ekmek.png" alt="" aria-hidden="true">
-      <img class="scroll-mascot" data-stage="2" data-side="left" src="assets/mascot/mascot-sebze.png" alt="" aria-hidden="true">
-      <img class="scroll-mascot" data-stage="3" data-side="right" src="assets/mascot/mascot-kofte.png" alt="" aria-hidden="true">
-      <img class="scroll-mascot" data-stage="4" data-side="left" src="assets/mascot/mascot-sos.png" alt="" aria-hidden="true">
+      <picture><source type="image/webp" srcset="assets/mascot/mascot-ekmek.webp"><img class="scroll-mascot" data-stage="1" data-side="right" src="assets/mascot/mascot-ekmek.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></picture>
+      <picture><source type="image/webp" srcset="assets/mascot/mascot-sebze.webp"><img class="scroll-mascot" data-stage="2" data-side="left" src="assets/mascot/mascot-sebze.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></picture>
+      <picture><source type="image/webp" srcset="assets/mascot/mascot-kofte.webp"><img class="scroll-mascot" data-stage="3" data-side="right" src="assets/mascot/mascot-kofte.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></picture>
+      <picture><source type="image/webp" srcset="assets/mascot/mascot-sos.webp"><img class="scroll-mascot" data-stage="4" data-side="left" src="assets/mascot/mascot-sos.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></picture>
 
       <div class="dots" id="dots"></div>
 
