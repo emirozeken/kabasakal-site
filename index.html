@@ -302,9 +302,10 @@
     </div>
   </section>
 
-  <!-- Fotoğraf-perde bölümü: fotoğraf viewport'a sabitlenir, sayfa üstünden akarken
-       kareler çapraz geçişle değişir. Dükkan/mekan fotoğrafları gelince aşağıdaki üç
-       src'yi değiştirmek yeterli (assets/hikaye/ önerilir), kod değişikliği gerekmez. -->
+  <!-- Fotoğraf-perde bölümü: tek fotoğraf viewport'a sabitlenir, sayfa üstünden akarken
+       yavaşça yakınlaşır/uzaklaşır (tek görüntü — kart kartı dönen bir slayt değil).
+       Daha fazla mekan fotoğrafı gelirse ayrı bir .reveal-img eklenip aynı akışa
+       dahil edilebilir; şimdilik kasıtlı olarak tek kare. -->
   <section class="reveal-section" id="hikaye">
     <div class="reveal" id="hikaye-reveal">
       <div class="reveal-media">
@@ -312,8 +313,6 @@
           <source type="image/webp" srcset="assets/hikaye/dukkan-gece.webp">
           <img class="reveal-img show" data-step="0" src="assets/hikaye/dukkan-gece.jpg" alt="Akşam vakti Kabasakal Restaurant'ın tabelası ve girişi" loading="lazy" decoding="async">
         </picture>
-        <img class="reveal-img" data-step="1" src="assets/menu/citir-tabagi.jpg" alt="" loading="lazy" decoding="async">
-        <img class="reveal-img" data-step="2" src="assets/menu/ayi-burger.jpg" alt="" loading="lazy" decoding="async">
         <div class="reveal-scrim" aria-hidden="true"></div>
         <div class="reveal-copy">
           <span class="eyebrow">07 · Hikaye</span>

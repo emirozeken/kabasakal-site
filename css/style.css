@@ -437,17 +437,16 @@ img{max-width:100%;display:block;}
 .siparis-note{ font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:26px; }
 
 /* Story — fotoğraf-perde (sticky reveal): media viewport'a yapışır, .reveal'ın kalan
-   yüksekliği (220vh - 100vh) boyunca kareler scroll'a bağlı çapraz geçiş yapar, sonraki
-   bölüm üstünü örterek geçer. background-attachment:fixed DEĞİL — o iOS'ta çalışmıyor,
-   sticky her yerde çalışıyor. */
+   yüksekliği (160vh - 100vh) boyunca TEK fotoğraf scroll'a bağlı olarak yavaşça
+   yakınlaşır (JS ile doğrudan transform, kare geçişi yok). background-attachment:fixed
+   DEĞİL — o iOS'ta çalışmıyor, sticky her yerde çalışıyor. */
 .reveal-section{ scroll-margin-top:0; }
-.reveal{ position:relative; height:220vh; }
+.reveal{ position:relative; height:160vh; }
 .reveal-media{ position:sticky; top:0; height:100vh; height:100dvh; overflow:hidden; background:var(--bg); }
 .reveal-img{
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-  opacity:0; transform:scale(1.08); transition:opacity .7s ease, transform 6s linear;
+  transform:scale(1.12);
 }
-.reveal-img.show{ opacity:1; transform:scale(1); }
 .reveal-scrim{
   position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(23,19,16,.62), rgba(23,19,16,.42) 45%, rgba(23,19,16,.78));
