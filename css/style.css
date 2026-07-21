@@ -487,23 +487,24 @@ img{max-width:100%;display:block;}
    tek keskin köşe (kuyruk yönü data-tail ile) + yaylanan pop girişi. */
 .review-bubbles{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
 .review-bubble{
-  position:absolute; max-width:230px; padding:14px 18px;
+  position:absolute; max-width:264px; padding:16px 20px;
   border-radius:16px 16px 16px 4px;
   background:rgba(42,34,28,.92); border:1px solid rgba(247,241,230,.14);
   box-shadow:0 10px 30px rgba(0,0,0,.4);
-  font-size:13px; line-height:1.6; color:rgba(247,241,230,.8);
+  font-size:14px; line-height:1.6; color:rgba(247,241,230,.8);
   opacity:0; transform:translateY(16px) scale(.8);
   transition:opacity .45s ease, transform .55s cubic-bezier(.34,1.56,.64,1);
   pointer-events:none;
 }
 .review-bubble[data-tail="right"]{ border-radius:16px 16px 4px 16px; }
 .review-bubble.show{ opacity:1; transform:translateY(0) scale(1); }
-/* Kaçış anı: hover algılanınca hızlı kaybolsun — normal fade (.45s) burada yavaş kalıyor.
-   Hover tespiti elemanda DEĞİL, bölüm mousemove'unda koordinatla yapılıyor (reviewBubbles):
-   baloncuk z-index olarak formun altında kaldığı için elemana hover asla güvenilir ulaşmaz. */
-.review-bubble.dodge{ transition:opacity .15s ease, transform .18s ease; }
-.review-bubble .stars{ display:block; color:var(--cheese); font-size:11px; letter-spacing:3px; margin-bottom:6px; }
-.review-bubble .who{ display:block; margin-top:8px; font-family:var(--mono); font-size:10.5px; color:rgba(247,241,230,.45); }
+/* Kaçış anı: hover algılanınca normal fade'den (.45s) hızlı ama göz izleyebilecek kadar
+   yumuşak kaybolsun. Hover tespiti elemanda DEĞİL, bölüm mousemove'unda koordinatla
+   yapılıyor (reviewBubbles): baloncuk z-index olarak formun altında kaldığı için
+   elemana hover asla güvenilir ulaşmaz. */
+.review-bubble.dodge{ transition:opacity .3s ease, transform .3s ease; }
+.review-bubble .stars{ display:block; color:var(--cheese); font-size:12px; letter-spacing:3px; margin-bottom:6px; }
+.review-bubble .who{ display:block; margin-top:8px; font-family:var(--mono); font-size:11.5px; color:rgba(247,241,230,.45); }
 @media (max-width:760px){ .review-bubbles{ display:none; } }
 @media (prefers-reduced-motion: reduce){ .review-bubbles{ display:none; } }
 .star-rating{ border:none; padding:0; margin:0; display:flex; flex-direction:row-reverse; justify-content:center; gap:6px; }

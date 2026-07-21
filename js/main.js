@@ -710,23 +710,32 @@ function drinkIconSVG(shape, color){
   container.setAttribute('aria-hidden', 'true');
   section.insertBefore(container, section.firstChild);
 
-  // Rastgele konum: sol/sağ kenar bandı (form kolonuna girmez), dikeyde serbest.
-  // Aynı taraftaki diğer baloncukla dikeyde çakışmasın diye birkaç deneme yapılır.
+  // Konum: taraf slot'a sabit (3 sol / 2 sağ — rastgele bırakınca bir taraf dolup
+  // üst üste binme oluyordu), dikeyde rastgele. Aynı taraftakilerle 24 puanlık dikey
+  // mesafe korunur; rastgele deneme tutmazsa en geniş boşluğun ortasına yerleşir.
   function pickPos(slot){
-    var best = null;
-    for(var t = 0; t < 12; t++){
-      var side = Math.random() < 0.5 ? 'left' : 'right';
-      var x = 1 + Math.random() * 14;  // %1-15 kenar bandı
-      var y = 4 + Math.random() * 74;  // %4-78 dikey
-      var clash = slots.some(function(o){
-        return o !== slot && o.side === side && Math.abs(o.y - y) < 30;
-      });
-      best = {side: side, x: x, y: y};
-      if(!clash) break;
+    var side = slot.fixedSide;
+    var x = 1 + Math.random() * 14;  // %1-15 kenar bandı
+    var others = slots.filter(function(o){ return o !== slot && o.fixedSide === side && o.y > -900; })
+      .map(function(o){ return o.y; }).sort(function(a, b){ return a - b; });
+    var y = null;
+    for(var t = 0; t < 16; t++){
+      var cand = 3 + Math.random() * 72;  // %3-75 dikey
+      var ok = others.every(function(oy){ return Math.abs(oy - cand) >= 24; });
+      if(ok){ y = cand; break; }
     }
-    slot.side = best.side;
-    slot.y = best.y;
-    return best;
+    if(y === null){
+      var pts = [3].concat(others).concat([75]);
+      var bestGap = 0, bestMid = 39;
+      for(var i = 1; i < pts.length; i++){
+        var gap = pts[i] - pts[i - 1];
+        if(gap > bestGap){ bestGap = gap; bestMid = pts[i - 1] + gap / 2; }
+      }
+      y = bestMid;
+    }
+    slot.side = side;
+    slot.y = y;
+    return {side: side, x: x, y: y};
   }
 
   // Havuzu karıştırıp sırayla tüket — aynı yorum art arda tekrar etmesin.
@@ -745,11 +754,11 @@ function drinkIconSVG(shape, color){
   }
 
   var slots = [];
-  for(var s = 0; s < 3; s++){
+  for(var s = 0; s < 5; s++){
     var el = document.createElement('div');
     el.className = 'review-bubble';
     container.appendChild(el);
-    slots.push({el: el, side: null, y: -999, holdTimer: 0, gapTimer: 0});
+    slots.push({el: el, fixedSide: (s % 2 === 0 ? 'left' : 'right'), side: null, y: -999, holdTimer: 0, gapTimer: 0});
   }
 
   function hide(slot, delay){
@@ -794,15 +803,15 @@ function drinkIconSVG(shape, color){
         var r = slot.el.getBoundingClientRect();
         if(mx >= r.left - 6 && mx <= r.right + 6 && my >= r.top - 6 && my <= r.bottom + 6){
           clearTimeout(slot.holdTimer);
-          slot.el.classList.add('dodge'); // hızlı kaçış geçişi (CSS)
-          hide(slot, 240);
+          slot.el.classList.add('dodge'); // hızlandırılmış ama izlenebilir kaçış geçişi (CSS)
+          hide(slot, 420);
         }
       });
     });
   }, {passive:true});
 
   slots.forEach(function(slot, i){
-    setTimeout(function(){ cycle(slot); }, i * 1100);
+    setTimeout(function(){ cycle(slot); }, i * 800);
   });
 })();
 
