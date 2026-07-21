@@ -813,7 +813,12 @@ function drinkIconSVG(shape, color){
   function hide(slot, delay){
     slot.el.classList.remove('show');
     clearTimeout(slot.gapTimer);
-    slot.gapTimer = setTimeout(function(){ cycle(slot); }, delay);
+    slot.gapTimer = setTimeout(function(){
+      // Boşalan yer diğer baloncuklara açılsın — eski konumu rezerve tutmak,
+      // yeni doğanları hep aynı kalan boşluğa itip "sabit düzen" hissi veriyordu.
+      slot.rect = null;
+      cycle(slot);
+    }, delay);
   }
 
   // Çağrıldığı an eleman görünmez durumda olmalı (ilk çağrıda öyle zaten, sonrakilerde
@@ -831,9 +836,13 @@ function drinkIconSVG(shape, color){
     slot.el.setAttribute('data-tail', (pos.x + pos.w / 2 < 50) ? 'left' : 'right');
     requestAnimationFrame(function(){ slot.el.classList.add('show'); });
 
-    var holdTime = 2400 + Math.random() * 1000; // ~2.4-3.4 sn okuma süresi
+    // Ömür ve bekleme kasıtlı olarak GENİŞ aralıkta rastgele: herkes aynı ritimde
+    // yanıp sönünce ekran hep 5 baloncukla doymuş kalıyor ve alan kısıtı yüzünden
+    // düzen sabitmiş gibi görünüyordu. Farklı ritimlerle ekrandaki sayı 2-5 arasında
+    // dalgalanır, boşluklar sürekli yer değiştirir.
+    var holdTime = 1800 + Math.random() * 2400; // ~1.8-4.2 sn
     clearTimeout(slot.holdTimer);
-    slot.holdTimer = setTimeout(function(){ hide(slot, 500); }, holdTime);
+    slot.holdTimer = setTimeout(function(){ hide(slot, 400 + Math.random() * 1200); }, holdTime);
   }
 
   // Kaçan baloncuk: hover tespiti elemanda DEĞİL — baloncuklar z-index olarak formun
@@ -860,7 +869,7 @@ function drinkIconSVG(shape, color){
   }, {passive:true});
 
   slots.forEach(function(slot, i){
-    setTimeout(function(){ cycle(slot); }, i * 800);
+    setTimeout(function(){ cycle(slot); }, i * 600 + Math.random() * 500);
   });
 })();
 
