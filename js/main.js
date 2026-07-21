@@ -710,23 +710,37 @@ function drinkIconSVG(shape, color){
   container.setAttribute('aria-hidden', 'true');
   section.insertBefore(container, section.firstChild);
 
-  // Konum: taraf slot'a sabit (3 sol / 2 sağ — rastgele bırakınca bir taraf dolup
-  // üst üste binme oluyordu), dikeyde rastgele. Aynı taraftakilerle 24 puanlık dikey
+  // Konum: taraf her döngüde rastgele (tek kural: bir tarafta en fazla 3 — yığılıp
+  // üst üste binmesin), dikeyde rastgele. Yatay bant sabit değil: ekran genişliğine
+  // göre form kolonuna çarpmayacak en geniş alan her seferinde hesaplanır — geniş
+  // ekranda baloncuklar kenara yapışıp kalmaz. Aynı taraftakilerle 22 puanlık dikey
   // mesafe korunur; rastgele deneme tutmazsa en geniş boşluğun ortasına yerleşir.
+  var form = section.querySelector('.feedback-form');
   function pickPos(slot){
-    var side = slot.fixedSide;
-    var x = 1 + Math.random() * 14;  // %1-15 kenar bandı
-    var others = slots.filter(function(o){ return o !== slot && o.fixedSide === side && o.y > -900; })
+    var counts = {left: 0, right: 0};
+    slots.forEach(function(o){ if(o !== slot && o.side && o.y > -900) counts[o.side]++; });
+    var side;
+    if(counts.left >= 3) side = 'right';
+    else if(counts.right >= 3) side = 'left';
+    else side = Math.random() < 0.5 ? 'left' : 'right';
+
+    var W = container.clientWidth || 1200;
+    var formW = form ? form.getBoundingClientRect().width : 480;
+    var xMaxPct = ((W - formW) / 2 - 264 - 24) / W * 100; // 264px baloncuk + 24px pay
+    if(xMaxPct < 2) xMaxPct = 2; // dar ekranda kenara yakın kal (form katmanı üstte zaten)
+    var x = 1 + Math.random() * (xMaxPct - 1);
+
+    var others = slots.filter(function(o){ return o !== slot && o.side === side && o.y > -900; })
       .map(function(o){ return o.y; }).sort(function(a, b){ return a - b; });
     var y = null;
     for(var t = 0; t < 16; t++){
-      var cand = 3 + Math.random() * 72;  // %3-75 dikey
-      var ok = others.every(function(oy){ return Math.abs(oy - cand) >= 24; });
+      var cand = 2 + Math.random() * 76;  // %2-78 dikey
+      var ok = others.every(function(oy){ return Math.abs(oy - cand) >= 22; });
       if(ok){ y = cand; break; }
     }
     if(y === null){
-      var pts = [3].concat(others).concat([75]);
-      var bestGap = 0, bestMid = 39;
+      var pts = [2].concat(others).concat([78]);
+      var bestGap = 0, bestMid = 40;
       for(var i = 1; i < pts.length; i++){
         var gap = pts[i] - pts[i - 1];
         if(gap > bestGap){ bestGap = gap; bestMid = pts[i - 1] + gap / 2; }
@@ -758,7 +772,7 @@ function drinkIconSVG(shape, color){
     var el = document.createElement('div');
     el.className = 'review-bubble';
     container.appendChild(el);
-    slots.push({el: el, fixedSide: (s % 2 === 0 ? 'left' : 'right'), side: null, y: -999, holdTimer: 0, gapTimer: 0});
+    slots.push({el: el, side: null, y: -999, holdTimer: 0, gapTimer: 0});
   }
 
   function hide(slot, delay){
