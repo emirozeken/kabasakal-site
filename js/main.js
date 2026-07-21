@@ -704,19 +704,23 @@ function drinkIconSVG(shape, color){
   container.setAttribute('aria-hidden', 'true');
   section.insertBefore(container, section.firstChild);
 
-  var zones = [
-    {top:'6%', left:'2%'}, {top:'9%', right:'3%'},
-    {top:'30%', left:'0%'}, {top:'33%', right:'1%'},
-    {top:'58%', left:'3%'}, {top:'61%', right:'4%'},
-    {top:'82%', left:'5%'}, {top:'85%', right:'3%'}
-  ];
-  var usedZones = [];
-
-  function pickZone(){
-    var idx, tries = 0;
-    do { idx = Math.floor(Math.random() * zones.length); tries++; }
-    while(usedZones.indexOf(idx) !== -1 && tries < 12);
-    return idx;
+  // Rastgele konum: sol/sağ kenar bandı (form kolonuna girmez), dikeyde serbest.
+  // Aynı taraftaki diğer baloncukla dikeyde çakışmasın diye birkaç deneme yapılır.
+  function pickPos(slot){
+    var best = null;
+    for(var t = 0; t < 12; t++){
+      var side = Math.random() < 0.5 ? 'left' : 'right';
+      var x = 1 + Math.random() * 14;  // %1-15 kenar bandı
+      var y = 4 + Math.random() * 74;  // %4-78 dikey
+      var clash = slots.some(function(o){
+        return o !== slot && o.side === side && Math.abs(o.y - y) < 30;
+      });
+      best = {side: side, x: x, y: y};
+      if(!clash) break;
+    }
+    slot.side = best.side;
+    slot.y = best.y;
+    return best;
   }
 
   // Havuzu karıştırıp sırayla tüket — aynı yorum art arda tekrar etmesin.
@@ -739,38 +743,32 @@ function drinkIconSVG(shape, color){
     var el = document.createElement('div');
     el.className = 'review-bubble';
     container.appendChild(el);
-    slots.push({el: el, zoneIdx: -1});
+    slots.push({el: el, side: null, y: -999});
   }
 
   // Çağrıldığı an eleman görünmez durumda olmalı (ilk çağrıda öyle zaten, sonrakilerde
   // bir önceki cycle'ın fade-out+bekleme adımı bunu garanti ediyor) — bu yüzden burada
   // konum/içerik değiştirip doğrudan fade-in yapabiliriz, ekstra bekleme gerekmez.
   function cycle(slot){
-    if(slot.zoneIdx !== -1){
-      var freed = usedZones.indexOf(slot.zoneIdx);
-      if(freed !== -1) usedZones.splice(freed, 1);
-    }
     var review = nextReview();
-    var zoneIdx = pickZone();
-    usedZones.push(zoneIdx);
-    slot.zoneIdx = zoneIdx;
-    var zone = zones[zoneIdx];
+    var pos = pickPos(slot);
 
-    slot.el.style.top = zone.top || '';
-    slot.el.style.left = zone.left !== undefined ? zone.left : '';
-    slot.el.style.right = zone.right !== undefined ? zone.right : '';
+    slot.el.style.top = pos.y.toFixed(1) + '%';
+    slot.el.style.left = pos.side === 'left' ? pos.x.toFixed(1) + '%' : '';
+    slot.el.style.right = pos.side === 'right' ? pos.x.toFixed(1) + '%' : '';
+    slot.el.setAttribute('data-tail', pos.side);
     slot.el.innerHTML = '<span class="stars">★★★★★</span>' + review.text + '<span class="who">— ' + review.who + ', Google</span>';
     requestAnimationFrame(function(){ slot.el.classList.add('show'); });
 
-    var holdTime = 2200 + Math.random() * 900;
+    var holdTime = 2400 + Math.random() * 1000; // ~2.4-3.4 sn okuma süresi
     setTimeout(function(){
       slot.el.classList.remove('show');
-      setTimeout(function(){ cycle(slot); }, 550);
+      setTimeout(function(){ cycle(slot); }, 500);
     }, holdTime);
   }
 
   slots.forEach(function(slot, i){
-    setTimeout(function(){ cycle(slot); }, i * 900);
+    setTimeout(function(){ cycle(slot); }, i * 1100);
   });
 })();
 

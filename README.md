@@ -27,7 +27,9 @@ sonra `http://localhost:8000` (ya da serve'un verdiği adres) açılır.
 
 ## Etkileşimli özellikler
 
-- **Scroll ilerleme çubuğu**, **nav aktif bölüm vurgusu** ve **numaralı bölüm akışı** (nav ve section başlıkları `01`–`07` — sayfanın gerçek yukarıdan-aşağı sırasını yansıtıyor) — hangi bölümde olduğunu gösterir.
+- **Scroll ilerleme çubuğu**, **nav aktif bölüm vurgusu** ve **numaralı bölüm akışı** (nav başlıkları `01`–`07`, section başlıkları `01`–`08` — geri bildirim nav'da yok ama akış numarasını taşıyor) — hangi bölümde olduğunu gösterir.
+- **Google yorum baloncukları + puan rozeti** (`#geri-bildirim`) — gerçek Google Haritalar yorumlarından 10 kısa alıntı (2026-07-21 çekimi), form arkasında rastgele kenar noktalarında ~2.4-3.4 sn belirip kaybolan konuşma baloncukları (masaüstü; mobil ve `prefers-reduced-motion`'da kapalı). Başlık altındaki "4,9 — 67 Google yorumu" rozeti her ekranda görünür ve gerçek profile gider. Yorumlar değişirse `js/main.js` → `reviewBubbles` → `reviews` dizisi elle güncellenir.
+- **DEPLOY KURALI — cache kırma:** GitHub Pages 10 dk tarayıcı cache'i veriyor; CSS/JS değişen her deploy'da `index.html`'deki `?v=...` sürüm değerini (3 yerde: style.css, supabase-config.js, main.js) artırmayı unutma, yoksa ziyaretçiler 10 dk boyunca bayat arayüz görür.
 - **Scroll-zoom canlı HUD paneli** — sac sıcaklığı + o anki işlem/katman okuması, scroll konumuna göre canlı güncelleniyor (dekoratif/atmosferik; gerçek içerik hâlâ caption metinlerinde). Küçük ekranlarda ve `prefers-reduced-motion` açıkken gizleniyor.
 - **Scroll-zoom "Bilgi +" popover'ları** — imza deneyimdeki her katmanın yanında genel bir bilgi açılır. Sadece o an ekranda olan katmanın butonu odaklanabilir/tıklanabilir (diğerleri erişilebilirlik ağacından tamamen çıkarılıyor, "görünmez ama sekmelenebilir" hatasına düşülmüyor).
 - **"Kendi Kabasakal'ını Tasarla"** — eğlenceli, gerçek sipariş sistemine bağlı olmayan bir katman seçici; seçime göre isim üretir. Not: hiçbir veri kaydedilmiyor, bu net şekilde kullanıcıya söyleniyor.

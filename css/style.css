@@ -468,20 +468,37 @@ img{max-width:100%;display:block;}
 #geri-bildirim .section-inner{ position:relative; z-index:1; }
 .feedback-form{ max-width:480px; margin:0 auto; display:flex; flex-direction:column; gap:22px; }
 
-/* Yorum baloncukları: gerçek Google yorumlarından kısa alıntılar, form arkasında
-   dağınık noktalarda belirip kayboluyor (bkz. js/main.js -> reviewBubbles).
-   pointer-events:none + düşük opaklık — form her zaman tıklanabilir/okunabilir kalır. */
+/* Google puan rozeti: baloncuklardaki alıntıların çapası — her ekran boyutunda görünür,
+   gerçek Google Haritalar profiline gider (baloncuklar mobilde kapalıyken sosyal kanıt
+   burada yaşamaya devam eder). */
+.gmaps-trust{
+  display:inline-flex; align-items:center; gap:8px; margin-top:16px;
+  font-family:var(--mono); font-size:12px; letter-spacing:.05em; text-decoration:none;
+  color:var(--cream); background:rgba(247,241,230,.06); border:1px solid rgba(247,241,230,.18);
+  padding:9px 16px; border-radius:999px; transition:border-color .2s, background .2s;
+}
+.gmaps-trust .trust-stars{ color:var(--cheese); letter-spacing:2px; font-size:11px; }
+.gmaps-trust:hover{ border-color:var(--cheese); background:rgba(247,241,230,.1); }
+.gmaps-trust:focus-visible{ outline:3px solid var(--cheese); outline-offset:3px; }
+
+/* Yorum baloncukları: gerçek Google yorumlarından kısa alıntılar, form arkasında rastgele
+   kenar noktalarında pop yapıp kayboluyor (bkz. js/main.js -> reviewBubbles).
+   pointer-events:none — form her zaman tıklanabilir kalır. Konuşma baloncuğu hissi:
+   tek keskin köşe (kuyruk yönü data-tail ile) + yaylanan pop girişi. */
 .review-bubbles{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
 .review-bubble{
-  position:absolute; max-width:200px; padding:12px 16px; border-radius:14px;
-  background:rgba(247,241,230,.05); border:1px solid rgba(247,241,230,.1);
-  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
-  font-family:var(--mono); font-size:12px; line-height:1.55; color:rgba(247,241,230,.5);
-  opacity:0; transform:translateY(10px) scale(.95); transition:opacity .6s ease, transform .6s ease;
+  position:absolute; max-width:230px; padding:14px 18px;
+  border-radius:16px 16px 16px 4px;
+  background:rgba(42,34,28,.92); border:1px solid rgba(247,241,230,.14);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  font-size:13px; line-height:1.6; color:rgba(247,241,230,.8);
+  opacity:0; transform:translateY(16px) scale(.8);
+  transition:opacity .45s ease, transform .55s cubic-bezier(.34,1.56,.64,1);
 }
+.review-bubble[data-tail="right"]{ border-radius:16px 16px 4px 16px; }
 .review-bubble.show{ opacity:1; transform:translateY(0) scale(1); }
-.review-bubble .stars{ display:block; color:var(--cheese); font-size:10px; letter-spacing:2px; margin-bottom:5px; }
-.review-bubble .who{ display:block; margin-top:6px; font-size:10.5px; color:rgba(247,241,230,.32); }
+.review-bubble .stars{ display:block; color:var(--cheese); font-size:11px; letter-spacing:3px; margin-bottom:6px; }
+.review-bubble .who{ display:block; margin-top:8px; font-family:var(--mono); font-size:10.5px; color:rgba(247,241,230,.45); }
 @media (max-width:760px){ .review-bubbles{ display:none; } }
 @media (prefers-reduced-motion: reduce){ .review-bubbles{ display:none; } }
 .star-rating{ border:none; padding:0; margin:0; display:flex; flex-direction:row-reverse; justify-content:center; gap:6px; }
