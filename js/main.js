@@ -688,15 +688,21 @@ function drinkIconSVG(shape, color){
 
   var reviews = [
     {text:'Hamburgerleri efsane, özellikle ayı burger mükemmel.', who:'Mert B.'},
+    {text:'Temiz, nezih, güler yüzlü ve ekonomik — hepsi bir arada.', who:'Mert B.'},
     {text:'Hayatımda yediğim en iyi burgerler arasına girer.', who:'Emir O.'},
-    {text:'El lezzeti gerçekten mükemmel, patatesler çıtır çıtır.', who:'Ömer Faruk Ö.'},
+    {text:'Patates kızartması ayrı bir güzel, deneyin.', who:'Emir O.'},
+    {text:'El lezzeti gerçekten mükemmel, soslar muazzam.', who:'Ömer Faruk Ö.'},
+    {text:'Bazen kendimi tutamayıp iki tane yiyorum, patatesler çıtır çıtır.', who:'Ömer Faruk Ö.'},
     {text:'Yediğim en güzel burgerdi, tadı damağımda kaldı.', who:'Ezgi D.'},
+    {text:'Etin sululuğu, ekmeğin yumuşaklığı ve uyum mükemmel.', who:'Sümeyye A.'},
     {text:'Favorim kesinlikle Rhino Burger, her ısırıkta “iyi ki almışım” dedirtiyor.', who:'Sümeyye A.'},
-    {text:'Sadece Akhisar’ın değil, Türkiye’de ilk 5’e rahat girer.', who:'Alper Ç.'},
-    {text:'Atmosferik bir iç dizayn, gerçekten çok kaliteli bir burger.', who:'Deniz'},
-    {text:'Yediğim en iyi hamburgerlerden birini yedim.', who:'sunshine'},
+    {text:'Bu tadı hiçbir şehirde bulamadım — Türkiye’de ilk 5’e rahat girer.', who:'Alper Ç.'},
+    {text:'İç dizaynı çok güzel, atmosferik ve Amerikan havası var.', who:'Deniz'},
+    {text:'Burgere burger diyebiliyorsunuz, gerçekten çok kaliteli.', who:'Deniz'},
+    {text:'Herkes çok ilgili ve güler yüzlüydü, çok doyurucuydu.', who:'sunshine'},
     {text:'İlk ısırıkta müdavimi olacağınız bir lezzet.', who:'Tuğrul İ.'},
-    {text:'Burgerin adını hak ettiği yer, beni burger canavarına çevirdi.', who:'Figen T.'}
+    {text:'Burgerin adını hak ettiği yer, beni burger canavarına çevirdi.', who:'Figen T.'},
+    {text:'Akhisar’ı seviye atlatan bir burgerci — anlatılmaz, yaşanır.', who:'Osman Emir Ö.'}
   ];
 
   var container = document.createElement('div');
@@ -743,11 +749,17 @@ function drinkIconSVG(shape, color){
     var el = document.createElement('div');
     el.className = 'review-bubble';
     container.appendChild(el);
-    slots.push({el: el, side: null, y: -999});
+    slots.push({el: el, side: null, y: -999, holdTimer: 0, gapTimer: 0});
+  }
+
+  function hide(slot, delay){
+    slot.el.classList.remove('show');
+    clearTimeout(slot.gapTimer);
+    slot.gapTimer = setTimeout(function(){ cycle(slot); }, delay);
   }
 
   // Çağrıldığı an eleman görünmez durumda olmalı (ilk çağrıda öyle zaten, sonrakilerde
-  // bir önceki cycle'ın fade-out+bekleme adımı bunu garanti ediyor) — bu yüzden burada
+  // hide()'ın fade-out+bekleme adımı bunu garanti ediyor) — bu yüzden burada
   // konum/içerik değiştirip doğrudan fade-in yapabiliriz, ekstra bekleme gerekmez.
   function cycle(slot){
     var review = nextReview();
@@ -761,13 +773,19 @@ function drinkIconSVG(shape, color){
     requestAnimationFrame(function(){ slot.el.classList.add('show'); });
 
     var holdTime = 2400 + Math.random() * 1000; // ~2.4-3.4 sn okuma süresi
-    setTimeout(function(){
-      slot.el.classList.remove('show');
-      setTimeout(function(){ cycle(slot); }, 500);
-    }, holdTime);
+    clearTimeout(slot.holdTimer);
+    slot.holdTimer = setTimeout(function(){ hide(slot, 500); }, holdTime);
   }
 
   slots.forEach(function(slot, i){
+    // Kaçan baloncuk: imleç üstüne gelince hemen kaybolur, kısa süre sonra başka
+    // bir yerde başka bir yorumla geri gelir. pointer-events yalnızca .show'dayken
+    // açık (CSS) — görünmez baloncuk imleci asla yakalamaz.
+    slot.el.addEventListener('mouseenter', function(){
+      if(!slot.el.classList.contains('show')) return;
+      clearTimeout(slot.holdTimer);
+      hide(slot, 380);
+    });
     setTimeout(function(){ cycle(slot); }, i * 1100);
   });
 })();
