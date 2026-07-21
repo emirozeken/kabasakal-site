@@ -710,46 +710,81 @@ function drinkIconSVG(shape, color){
   container.setAttribute('aria-hidden', 'true');
   section.insertBefore(container, section.firstChild);
 
-  // Konum: taraf her döngüde rastgele (tek kural: bir tarafta en fazla 3 — yığılıp
-  // üst üste binmesin), dikeyde rastgele. Yatay bant sabit değil: ekran genişliğine
-  // göre form kolonuna çarpmayacak en geniş alan her seferinde hesaplanır — geniş
-  // ekranda baloncuklar kenara yapışıp kalmaz. Aynı taraftakilerle 22 puanlık dikey
-  // mesafe korunur; rastgele deneme tutmazsa en geniş boşluğun ortasına yerleşir.
+  // Konum: "izinli şerit" değil, "yasaklı bölge" mantığı — baloncuk bölümün HER
+  // yerinde belirebilir (üst/alt orta, köşeler, formun altı...); tek kural başlığın
+  // (.section-head) ve formun gerçek dikdörtgenine çarpmamak ve görünür diğer
+  // baloncuklarla üst üste binmemek. Böylece dağılım kenar şeridine sıkışmaz.
   var form = section.querySelector('.feedback-form');
+  var head = section.querySelector('.section-head');
+
+  function rectPct(el, cr, pad){
+    var r = el.getBoundingClientRect();
+    return {
+      left:  (r.left  - cr.left) / cr.width  * 100 - pad,
+      right: (r.right - cr.left) / cr.width  * 100 + pad,
+      top:   (r.top   - cr.top)  / cr.height * 100 - pad,
+      bottom:(r.bottom- cr.top)  / cr.height * 100 + pad
+    };
+  }
+  function intersects(a, b){
+    return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+  }
+
+  // İçerik yerleştirildikten SONRA çağrılır — gerçek baloncuk yüksekliği ölçülür.
   function pickPos(slot){
-    var counts = {left: 0, right: 0};
-    slots.forEach(function(o){ if(o !== slot && o.side && o.y > -900) counts[o.side]++; });
-    var side;
-    if(counts.left >= 3) side = 'right';
-    else if(counts.right >= 3) side = 'left';
-    else side = Math.random() < 0.5 ? 'left' : 'right';
+    var cr = container.getBoundingClientRect();
+    var wPct = 264 / cr.width * 100;
+    var hPct = (slot.el.offsetHeight || 110) / cr.height * 100;
 
-    var W = container.clientWidth || 1200;
-    var formW = form ? form.getBoundingClientRect().width : 480;
-    var xMaxPct = ((W - formW) / 2 - 264 - 24) / W * 100; // 264px baloncuk + 24px pay
-    if(xMaxPct < 2) xMaxPct = 2; // dar ekranda kenara yakın kal (form katmanı üstte zaten)
-    var x = 1 + Math.random() * (xMaxPct - 1);
+    var obstacles = [];
+    if(form) obstacles.push(rectPct(form, cr, 2));
+    if(head){
+      // Başlık bloğu tam genişlikte ama metin ortada — boş kanatlarını yasaklama,
+      // yoksa üst bölgenin tamamı kapanıp baloncuklar yine kenara sıkışıyor.
+      // Blok kutusunun ortadaki %40'ı yasak (başlık metnini örter), kanatlar serbest.
+      var hr = rectPct(head, cr, 2);
+      var shrink = (hr.right - hr.left) * 0.3;
+      hr.left += shrink; hr.right -= shrink;
+      obstacles.push(hr);
+      // Rozet inline eleman — gerçek (dar) kutusu ölçülür, ayrı engel olarak eklenir.
+      var trust = head.querySelector('.gmaps-trust');
+      if(trust) obstacles.push(rectPct(trust, cr, 2));
+    }
 
-    var others = slots.filter(function(o){ return o !== slot && o.side === side && o.y > -900; })
-      .map(function(o){ return o.y; }).sort(function(a, b){ return a - b; });
-    var y = null;
-    for(var t = 0; t < 16; t++){
-      var cand = 2 + Math.random() * 76;  // %2-78 dikey
-      var ok = others.every(function(oy){ return Math.abs(oy - cand) >= 22; });
-      if(ok){ y = cand; break; }
+    function clashes(rect, margin){
+      return obstacles.some(function(o){ return intersects(rect, o); }) ||
+        slots.some(function(o){
+          return o !== slot && o.rect && intersects(rect, {
+            left: o.rect.left - margin, right: o.rect.right + margin,
+            top: o.rect.top - margin, bottom: o.rect.bottom + margin
+          });
+        });
     }
-    if(y === null){
-      var pts = [2].concat(others).concat([78]);
-      var bestGap = 0, bestMid = 40;
-      for(var i = 1; i < pts.length; i++){
-        var gap = pts[i] - pts[i - 1];
-        if(gap > bestGap){ bestGap = gap; bestMid = pts[i - 1] + gap / 2; }
-      }
-      y = bestMid;
+
+    var cand = null;
+    // 1. aşama: tamamen serbest arama — ilk 24 deneme rahat aralıkla (3), sonra sıkışık (0)
+    for(var t = 0; t < 40 && !cand; t++){
+      var x = 1 + Math.random() * Math.max(1, 97 - wPct);
+      var y = 2 + Math.random() * Math.max(1, 93 - hPct);
+      var rect = {left: x, right: x + wPct, top: y, bottom: y + hPct};
+      if(!clashes(rect, t < 24 ? 3 : 0)) cand = {x: x, y: y, rect: rect};
     }
-    slot.side = side;
-    slot.y = y;
-    return {side: side, x: x, y: y};
+    // 2. aşama: kenar bandında ama yine engel/baloncuk kontrollü
+    for(var t2 = 0; t2 < 12 && !cand; t2++){
+      var fx = Math.random() < 0.5 ? 1 : Math.max(1, 97 - wPct);
+      var fy = 2 + Math.random() * Math.max(1, 93 - hPct);
+      var r2 = {left: fx, right: fx + wPct, top: fy, bottom: fy + hPct};
+      if(!clashes(r2, 0)) cand = {x: fx, y: fy, rect: r2};
+    }
+    // 3. son çare (pratikte ulaşılmaz): rastgele kenar noktası — sabit köşe DEĞİL,
+    // yoksa arka arkaya aynı köşede belirip "hep aynı yer" hissi veriyor.
+    if(!cand){
+      var lx = Math.random() < 0.5 ? 1 : Math.max(1, 97 - wPct);
+      var ly = 2 + Math.random() * Math.max(1, 93 - hPct);
+      cand = {x: lx, y: ly, rect: {left: lx, right: lx + wPct, top: ly, bottom: ly + hPct}};
+    }
+    slot.rect = cand.rect;
+    return {x: cand.x, y: cand.y, w: wPct};
   }
 
   // Havuzu karıştırıp sırayla tüket — aynı yorum art arda tekrar etmesin.
@@ -772,7 +807,7 @@ function drinkIconSVG(shape, color){
     var el = document.createElement('div');
     el.className = 'review-bubble';
     container.appendChild(el);
-    slots.push({el: el, side: null, y: -999, holdTimer: 0, gapTimer: 0});
+    slots.push({el: el, rect: null, holdTimer: 0, gapTimer: 0});
   }
 
   function hide(slot, delay){
@@ -786,14 +821,14 @@ function drinkIconSVG(shape, color){
   // konum/içerik değiştirip doğrudan fade-in yapabiliriz, ekstra bekleme gerekmez.
   function cycle(slot){
     var review = nextReview();
-    var pos = pickPos(slot);
 
     slot.el.classList.remove('dodge'); // pop-in yaylı (yavaş) geçişle olsun, kaçış hızıyla değil
-    slot.el.style.top = pos.y.toFixed(1) + '%';
-    slot.el.style.left = pos.side === 'left' ? pos.x.toFixed(1) + '%' : '';
-    slot.el.style.right = pos.side === 'right' ? pos.x.toFixed(1) + '%' : '';
-    slot.el.setAttribute('data-tail', pos.side);
     slot.el.innerHTML = '<span class="stars">★★★★★</span>' + review.text + '<span class="who">— ' + review.who + ', Google</span>';
+    var pos = pickPos(slot); // içerik konduktan sonra: gerçek yükseklik ölçülür
+    slot.el.style.top = pos.y.toFixed(2) + '%';
+    slot.el.style.left = pos.x.toFixed(2) + '%';
+    slot.el.style.right = '';
+    slot.el.setAttribute('data-tail', (pos.x + pos.w / 2 < 50) ? 'left' : 'right');
     requestAnimationFrame(function(){ slot.el.classList.add('show'); });
 
     var holdTime = 2400 + Math.random() * 1000; // ~2.4-3.4 sn okuma süresi
