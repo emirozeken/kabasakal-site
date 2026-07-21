@@ -678,6 +678,102 @@ function drinkIconSVG(shape, color){
   });
 })();
 
+(function reviewBubbles(){
+  // Google Haritalar'daki gerçek yorumlardan kısa alıntılar (2026-07-21, kabasakalburger
+  // profili, 4.9/67 yorum) — form doldururken arkada dağınık noktalarda belirip kayboluyor.
+  var section = document.getElementById('geri-bildirim');
+  if(!section) return;
+  if(window.matchMedia('(max-width: 760px)').matches) return; // CSS zaten gizliyor, JS'i de çalıştırma
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var reviews = [
+    {text:'Hamburgerleri efsane, özellikle ayı burger mükemmel.', who:'Mert B.'},
+    {text:'Hayatımda yediğim en iyi burgerler arasına girer.', who:'Emir O.'},
+    {text:'El lezzeti gerçekten mükemmel, patatesler çıtır çıtır.', who:'Ömer Faruk Ö.'},
+    {text:'Yediğim en güzel burgerdi, tadı damağımda kaldı.', who:'Ezgi D.'},
+    {text:'Favorim kesinlikle Rhino Burger, her ısırıkta “iyi ki almışım” dedirtiyor.', who:'Sümeyye A.'},
+    {text:'Sadece Akhisar’ın değil, Türkiye’de ilk 5’e rahat girer.', who:'Alper Ç.'},
+    {text:'Atmosferik bir iç dizayn, gerçekten çok kaliteli bir burger.', who:'Deniz'},
+    {text:'Yediğim en iyi hamburgerlerden birini yedim.', who:'sunshine'},
+    {text:'İlk ısırıkta müdavimi olacağınız bir lezzet.', who:'Tuğrul İ.'},
+    {text:'Burgerin adını hak ettiği yer, beni burger canavarına çevirdi.', who:'Figen T.'}
+  ];
+
+  var container = document.createElement('div');
+  container.className = 'review-bubbles';
+  container.setAttribute('aria-hidden', 'true');
+  section.insertBefore(container, section.firstChild);
+
+  var zones = [
+    {top:'6%', left:'2%'}, {top:'9%', right:'3%'},
+    {top:'30%', left:'0%'}, {top:'33%', right:'1%'},
+    {top:'58%', left:'3%'}, {top:'61%', right:'4%'},
+    {top:'82%', left:'5%'}, {top:'85%', right:'3%'}
+  ];
+  var usedZones = [];
+
+  function pickZone(){
+    var idx, tries = 0;
+    do { idx = Math.floor(Math.random() * zones.length); tries++; }
+    while(usedZones.indexOf(idx) !== -1 && tries < 12);
+    return idx;
+  }
+
+  // Havuzu karıştırıp sırayla tüket — aynı yorum art arda tekrar etmesin.
+  var order = reviews.map(function(_, i){ return i; });
+  var orderPos = order.length; // ilk cycle() cagrisinda hemen karistirsin
+
+  function nextReview(){
+    if(orderPos >= order.length){
+      for(var i = order.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = order[i]; order[i] = order[j]; order[j] = t;
+      }
+      orderPos = 0;
+    }
+    return reviews[order[orderPos++]];
+  }
+
+  var slots = [];
+  for(var s = 0; s < 3; s++){
+    var el = document.createElement('div');
+    el.className = 'review-bubble';
+    container.appendChild(el);
+    slots.push({el: el, zoneIdx: -1});
+  }
+
+  // Çağrıldığı an eleman görünmez durumda olmalı (ilk çağrıda öyle zaten, sonrakilerde
+  // bir önceki cycle'ın fade-out+bekleme adımı bunu garanti ediyor) — bu yüzden burada
+  // konum/içerik değiştirip doğrudan fade-in yapabiliriz, ekstra bekleme gerekmez.
+  function cycle(slot){
+    if(slot.zoneIdx !== -1){
+      var freed = usedZones.indexOf(slot.zoneIdx);
+      if(freed !== -1) usedZones.splice(freed, 1);
+    }
+    var review = nextReview();
+    var zoneIdx = pickZone();
+    usedZones.push(zoneIdx);
+    slot.zoneIdx = zoneIdx;
+    var zone = zones[zoneIdx];
+
+    slot.el.style.top = zone.top || '';
+    slot.el.style.left = zone.left !== undefined ? zone.left : '';
+    slot.el.style.right = zone.right !== undefined ? zone.right : '';
+    slot.el.innerHTML = '<span class="stars">★★★★★</span>' + review.text + '<span class="who">— ' + review.who + ', Google</span>';
+    requestAnimationFrame(function(){ slot.el.classList.add('show'); });
+
+    var holdTime = 2200 + Math.random() * 900;
+    setTimeout(function(){
+      slot.el.classList.remove('show');
+      setTimeout(function(){ cycle(slot); }, 550);
+    }, holdTime);
+  }
+
+  slots.forEach(function(slot, i){
+    setTimeout(function(){ cycle(slot); }, i * 900);
+  });
+})();
+
 (function feedbackForm(){
   var form = document.getElementById('feedback-form');
   if(!form) return;
