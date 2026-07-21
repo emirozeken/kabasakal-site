@@ -299,6 +299,32 @@ function drinkIconSVG(shape, color){
   document.addEventListener('click', closeAll);
 })();
 
+(function hikayeCurtain(){
+  var app = document.getElementById('app');
+  var win = document.getElementById('hikaye-window');
+  var scene = win ? win.querySelector('.reveal-scene') : null;
+  if(!app || !win || !scene) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // CSS statik gösteriyor
+
+  var ticking = false;
+
+  function update(){
+    ticking = false;
+    // pencere normal akışta kayar; sahne her karede pencerenin viewport konumunu geri
+    // alarak ekrana çakılıymış gibi durur. overflow:hidden pencere dışını keser —
+    // position:fixed + clip-path'in aksine bu her tarayıcıda aynı davranır.
+    var top = win.getBoundingClientRect().top;
+    var vh = window.innerHeight;
+    if(top > vh + 60 || top < -(vh + 60)) return; // bölümden uzaktayken hiç dokunma
+    scene.style.transform = 'translateY(' + (-top).toFixed(2) + 'px)';
+  }
+  app.addEventListener('scroll', function(){
+    if(!ticking){ ticking = true; requestAnimationFrame(update); }
+  }, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+
 (function mobileNav(){
   var toggle = document.getElementById('nav-toggle');
   var topnav = document.querySelector('.topnav');

@@ -436,15 +436,16 @@ img{max-width:100%;display:block;}
 .siparis-ctas{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:8px; }
 .siparis-note{ font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:26px; }
 
-/* Story — fotoğraf-perde: fotoğraf position:fixed ile viewport'a çakılı durur,
-   .reveal-window'daki clip-path:inset(0) onu yalnızca bu bölümün sınırları içinde
-   gösterir. Scroll hiç durmaz — önceki bölüm kayarken fotoğraf perde gibi açılır,
-   sonraki bölüm üstünü örter. background-attachment:fixed DEĞİL (iOS'ta bozuk),
-   clip-path tekniği her yerde çalışıyor. DİKKAT: .reveal-window'a asla transform
-   verme — verilirse fixed çocuk pencereye bağlanır ve efekt bozulur. */
+/* Story — fotoğraf-perde: 100vh'lik pencere (overflow:hidden) normal akışta kayar,
+   içindeki .reveal-scene JS ile (js/main.js -> hikayeCurtain) her karede
+   translateY(-pencereninViewportTop'u) alır — böylece sahne viewport'a çakılıymış gibi
+   durur, önceki/sonraki bölümler üzerinden perde gibi geçer. Scroll hiç durmaz, ekstra
+   scroll mesafesi yok. position:fixed / clip-path / background-attachment:fixed BİLEREK
+   yok — üçü de en az bir büyük tarayıcıda bozuluyor; overflow:hidden + transform her
+   yerde çalışır. */
 .reveal-section{ scroll-margin-top:0; }
-.reveal-window{ position:relative; height:100vh; height:100dvh; clip-path:inset(0); background:var(--bg); }
-.reveal-fixed{ position:fixed; top:0; left:0; width:100%; height:100vh; height:100dvh; }
+.reveal-window{ position:relative; height:100vh; height:100dvh; overflow:hidden; background:var(--bg); }
+.reveal-scene{ position:absolute; top:0; left:0; width:100%; height:100vh; height:100dvh; will-change:transform; }
 .reveal-img{
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
 }
@@ -549,8 +550,8 @@ footer{ background:var(--bg-3); padding:60px 24px 40px; border-top:1px solid var
 .end{height:6vh;}
 
 @media (prefers-reduced-motion: reduce){
-  .reveal-window{height:70vh; clip-path:none;}
-  .reveal-fixed{position:absolute; inset:0; height:100%;}
+  .reveal-window{height:70vh;}
+  .reveal-scene{position:absolute; inset:0; height:100%; transform:none !important;}
   .scrollzoom{height:auto;}
   .sticky{position:relative; height:auto; padding:60px 0;}
   .stack{position:relative; left:auto; transform:translateX(0) !important; margin:0 auto;}
