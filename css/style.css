@@ -494,12 +494,14 @@ img{max-width:100%;display:block;}
   font-size:13px; line-height:1.6; color:rgba(247,241,230,.8);
   opacity:0; transform:translateY(16px) scale(.8);
   transition:opacity .45s ease, transform .55s cubic-bezier(.34,1.56,.64,1);
-  pointer-events:none; cursor:default;
+  pointer-events:none;
 }
 .review-bubble[data-tail="right"]{ border-radius:16px 16px 4px 16px; }
-/* pointer-events yalnızca görünürken açık — "kaçan baloncuk" hover'ı JS'te (reviewBubbles);
-   görünmez baloncuk imleci yakalayıp alttaki içeriği engelleyemez */
-.review-bubble.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+.review-bubble.show{ opacity:1; transform:translateY(0) scale(1); }
+/* Kaçış anı: hover algılanınca hızlı kaybolsun — normal fade (.45s) burada yavaş kalıyor.
+   Hover tespiti elemanda DEĞİL, bölüm mousemove'unda koordinatla yapılıyor (reviewBubbles):
+   baloncuk z-index olarak formun altında kaldığı için elemana hover asla güvenilir ulaşmaz. */
+.review-bubble.dodge{ transition:opacity .15s ease, transform .18s ease; }
 .review-bubble .stars{ display:block; color:var(--cheese); font-size:11px; letter-spacing:3px; margin-bottom:6px; }
 .review-bubble .who{ display:block; margin-top:8px; font-family:var(--mono); font-size:10.5px; color:rgba(247,241,230,.45); }
 @media (max-width:760px){ .review-bubbles{ display:none; } }

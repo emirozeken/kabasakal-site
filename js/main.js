@@ -765,6 +765,7 @@ function drinkIconSVG(shape, color){
     var review = nextReview();
     var pos = pickPos(slot);
 
+    slot.el.classList.remove('dodge'); // pop-in yaylı (yavaş) geçişle olsun, kaçış hızıyla değil
     slot.el.style.top = pos.y.toFixed(1) + '%';
     slot.el.style.left = pos.side === 'left' ? pos.x.toFixed(1) + '%' : '';
     slot.el.style.right = pos.side === 'right' ? pos.x.toFixed(1) + '%' : '';
@@ -777,15 +778,30 @@ function drinkIconSVG(shape, color){
     slot.holdTimer = setTimeout(function(){ hide(slot, 500); }, holdTime);
   }
 
-  slots.forEach(function(slot, i){
-    // Kaçan baloncuk: imleç üstüne gelince hemen kaybolur, kısa süre sonra başka
-    // bir yerde başka bir yorumla geri gelir. pointer-events yalnızca .show'dayken
-    // açık (CSS) — görünmez baloncuk imleci asla yakalamaz.
-    slot.el.addEventListener('mouseenter', function(){
-      if(!slot.el.classList.contains('show')) return;
-      clearTimeout(slot.holdTimer);
-      hide(slot, 380);
+  // Kaçan baloncuk: hover tespiti elemanda DEĞİL — baloncuklar z-index olarak formun
+  // altında kaldığı için elemana mouseenter güvenilir ulaşmıyor. Bunun yerine bölümün
+  // mousemove'unda imleç koordinatı görünür baloncukların dikdörtgeniyle karşılaştırılıyor;
+  // üstteki katman kim olursa olsun isabet her zaman algılanır.
+  var mmTicking = false;
+  section.addEventListener('mousemove', function(e){
+    if(mmTicking) return;
+    mmTicking = true;
+    var mx = e.clientX, my = e.clientY;
+    requestAnimationFrame(function(){
+      mmTicking = false;
+      slots.forEach(function(slot){
+        if(!slot.el.classList.contains('show')) return;
+        var r = slot.el.getBoundingClientRect();
+        if(mx >= r.left - 6 && mx <= r.right + 6 && my >= r.top - 6 && my <= r.bottom + 6){
+          clearTimeout(slot.holdTimer);
+          slot.el.classList.add('dodge'); // hızlı kaçış geçişi (CSS)
+          hide(slot, 240);
+        }
+      });
     });
+  }, {passive:true});
+
+  slots.forEach(function(slot, i){
     setTimeout(function(){ cycle(slot); }, i * 1100);
   });
 })();
