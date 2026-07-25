@@ -20,7 +20,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- ?v= sürüm parametresi: GitHub Pages 10 dk cache veriyor; her deploy'da bu değeri
      artırmak tarayıcıların bayat CSS/JS kullanmasını engelliyor -->
-<link rel="stylesheet" href="css/style.css?v=20260722f">
+<link rel="stylesheet" href="css/style.css?v=20260722g">
 </head>
 <body>
 
@@ -386,8 +386,11 @@
   <div class="end"></div>
 </div>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="js/supabase-config.js?v=20260722f"></script>
-<script src="js/main.js?v=20260722f"></script>
+<!-- defer: üçü paralel indirilir (unpkg'e ayrı bir DNS/TLS gidiş-dönüşü var, sırayla
+     indirmek gereksiz gecikme ekliyordu), belge sırasına göre çalışır — main.js'teki
+     window.supabase.createClient() çağrısı hâlâ garanti şekilde ilk scriptten sonra çalışır -->
+<script src="https://unpkg.com/@supabase/supabase-js@2" defer></script>
+<script src="js/supabase-config.js?v=20260722g" defer></script>
+<script src="js/main.js?v=20260722g" defer></script>
 </body>
 </html>

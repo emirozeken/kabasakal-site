@@ -1,3 +1,15 @@
+// Tek paylaşılan mönü verisi — üç ayrı bölüm (mönü ızgarası, quiz, geri bildirim
+// burger seçici) aynı statik data/menu.json'ı sayfa açılışında birbirinden habersiz
+// üç kez fetch ediyordu. Tek fetch, üçüne de aynı promise üzerinden dağıtılıyor.
+var menuDataPromise = fetch('data/menu.json').then(function(res){ return res.json(); });
+
+// Tek paylaşılan Supabase client — rezervasyon ve geri bildirim formları ayrı ayrı
+// createClient() çağırıyordu; ikisi de aynı localStorage auth key'ini kullandığı için
+// tarayıcı konsoluna "Multiple GoTrueClient instances" uyarısı düşüyordu.
+var supabaseConfigured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
+  window.SUPABASE_URL.indexOf('TODO') !== 0 && window.SUPABASE_ANON_KEY.indexOf('TODO') !== 0;
+var supabaseClient = supabaseConfigured ? window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY) : null;
+
 (function scrollZoom(){
   var app = document.getElementById('app');
   var scrollzoom = document.getElementById('scrollzoom');
@@ -187,8 +199,7 @@ function drinkIconSVG(shape, color){
   var grid = document.getElementById('menu-grid');
   if(!grid) return;
 
-  fetch('data/menu.json')
-    .then(function(res){ return res.json(); })
+  menuDataPromise
     .then(function(data){
       grid.innerHTML = '';
 
@@ -455,12 +466,10 @@ function drinkIconSVG(shape, color){
   var currentIndex = 0;
   var collectedTags = [];
 
-  var burgersPromise = fetch('data/menu.json')
-    .then(function(res){ return res.json(); })
-    .then(function(data){
-      var cat = data.categories.find(function(c){ return c.name === 'Burgerler'; });
-      return cat ? cat.items : [];
-    });
+  var burgersPromise = menuDataPromise.then(function(data){
+    var cat = data.categories.find(function(c){ return c.name === 'Burgerler'; });
+    return cat ? cat.items : [];
+  });
 
   function renderQuestion(){
     var q = questions[currentIndex];
@@ -609,16 +618,13 @@ function drinkIconSVG(shape, color){
     });
   })();
 
-  var configured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
-    window.SUPABASE_URL.indexOf('TODO') !== 0 && window.SUPABASE_ANON_KEY.indexOf('TODO') !== 0;
-
-  if(!configured){
+  if(!supabaseConfigured){
     submitBtn.disabled = true;
     statusEl.textContent = 'Bu form henüz aktif değil — Supabase bağlantısı bekleniyor.';
     return;
   }
 
-  var client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+  var client = supabaseClient;
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
@@ -882,8 +888,7 @@ function drinkIconSVG(shape, color){
   var statusEl = document.getElementById('feedback-status');
   var honeypot = document.getElementById('feedback-honeypot');
 
-  fetch('data/menu.json')
-    .then(function(res){ return res.json(); })
+  menuDataPromise
     .then(function(data){
       var cat = data.categories.find(function(c){ return c.name === 'Burgerler'; });
       (cat ? cat.items : []).forEach(function(item){
@@ -894,16 +899,13 @@ function drinkIconSVG(shape, color){
       });
     });
 
-  var configured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
-    window.SUPABASE_URL.indexOf('TODO') !== 0 && window.SUPABASE_ANON_KEY.indexOf('TODO') !== 0;
-
-  if(!configured){
+  if(!supabaseConfigured){
     submitBtn.disabled = true;
     statusEl.textContent = 'Bu form henüz aktif değil — Supabase bağlantısı bekleniyor.';
     return;
   }
 
-  var client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+  var client = supabaseClient;
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
