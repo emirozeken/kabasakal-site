@@ -354,7 +354,10 @@ img{max-width:100%;display:block;}
 .menu-cat-nav{ display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin:-24px 0 40px; }
 .menu-cat-chip{
   font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.06em;
-  color:rgba(247,241,230,.75); text-decoration:none; padding:8px 18px;
+  color:rgba(247,241,230,.75); text-decoration:none;
+  /* dikey padding 8px'ten yükseltildi — 34 ürünlük mönüde kategori atlamak için sık
+     dokunulan bir kontrol, ~33px WCAG 44px dokunma-hedefinin altındaydı */
+  padding:14px 18px;
   border:1px solid var(--line); border-radius:24px; transition:border-color .15s, color .15s;
 }
 .menu-cat-chip:hover{ border-color:var(--sauce); color:var(--cheese); }
@@ -541,7 +544,10 @@ img{max-width:100%;display:block;}
 .reservation-time-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:8px; }
 .time-slot{
   font-family:var(--mono); font-size:13px; color:var(--cream); background:var(--bg-3);
-  border:1px solid var(--line); border-radius:10px; padding:9px 6px; cursor:pointer;
+  border:1px solid var(--line); border-radius:10px;
+  /* ~37px'ten yükseltildi — telefonda rezervasyon saati seçmek 20 buton arasından
+     yapılıyor, dar dokunma alanı yanlış saat seçimine yol açıyordu */
+  padding:13px 6px; cursor:pointer;
   transition:border-color .15s, background-color .15s;
 }
 .time-slot:hover{ border-color:var(--sauce); }
@@ -567,7 +573,9 @@ footer{ background:var(--bg-3); padding:60px 24px 40px; border-top:1px solid var
 .builder-controls fieldset{ border:none; padding:0; margin:0 0 22px; }
 .builder-controls legend{ font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--cheese); margin-bottom:12px; padding:0; }
 .chip-toggle{
-  display:inline-flex; align-items:center; gap:8px; margin:0 10px 10px 0; padding:9px 16px;
+  display:inline-flex; align-items:center; gap:8px; margin:0 10px 10px 0;
+  /* ~39px'ten yükseltildi — burger builder'daki katman anahtarları */
+  padding:12px 16px;
   border:1px solid var(--line); border-radius:30px; cursor:pointer; font-size:13px;
   transition:border-color .15s, background-color .15s;
 }
