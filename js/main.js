@@ -65,6 +65,15 @@ var supabaseClient = supabaseConfigured ? window.supabase.createClient(window.SU
 
   var ticking = false;
 
+  // Katman yükseklikleri sabit piksel (bkz. .slab.*), genişlik ise 70vw ile daralıyor —
+  // dar ekranda "geri çekilmiş, tüm burgeri gösteren" sahneler (s düşükken, ör. giriş
+  // karesi s:0.72) giderek uzun/ince görünüyordu. Yalnızca bu geri-çekilmiş anlarda
+  // dikeyde hafifçe sıkıştırıp basık/şişko bir görünüm veriyoruz; s arttıkça (kameranın
+  // bir katmana yakınlaştığı anlar, ör. köfte close-up'ı s:2.55) sıkıştırma s=1.6'da sıfıra
+  // iniyor — böylece özenle ayarlanmış yakın çekimler mobilde de hiç bozulmuyor, masaüstü
+  // hiç etkilenmiyor (sy===s her zaman).
+  var mobileFlatten = window.matchMedia('(max-width:640px)').matches;
+
   function update(){
     ticking = false;
     var scrollzoomTop = scrollzoom.offsetTop;
@@ -80,10 +89,17 @@ var supabaseClient = supabaseConfigured ? window.supabase.createClient(window.SU
 
     var c = lerp(stages[idx].c, stages[idx+1].c, t);
     var s = lerp(stages[idx].s, stages[idx+1].s, t);
-    var viewportCenter = app.clientHeight/2;
-    var T = viewportCenter - s*c;
 
-    stack.style.transform = 'translateX(-50%) translateY('+T+'px) scale('+s+')';
+    var sy = s;
+    if(mobileFlatten){
+      var squashFade = clamp((s - 0.72) / (1.6 - 0.72), 0, 1); // 0 = tam geri çekilmiş, 1 = katmana yakınlaşmış
+      sy = s * (1 - 0.42 * (1 - squashFade));
+    }
+
+    var viewportCenter = app.clientHeight/2;
+    var T = viewportCenter - sy*c;
+
+    stack.style.transform = 'translateX(-50%) translateY('+T+'px) scale('+s+','+sy+')';
 
     captions.forEach(function(el){
       var stageIdx = parseInt(el.getAttribute('data-stage'),10);
@@ -317,23 +333,20 @@ function drinkIconSVG(shape, color){
   if(!app || !win || !scene) return;
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // CSS statik gösteriyor
 
-  var ticking = false;
-
+  // scroll event'ine bağlı güncelleme mobilde titriyordu: mobil tarayıcılar hızlı
+  // "momentum scroll" sırasında scroll event'lerini seyrekleştiriyor/gruplandırıyor,
+  // JS bir sonraki event'i beklerken görüntü geride kalıp sıçrayarak yetişiyordu.
+  // Bunun yerine her animasyon karesinde (event beklemeden) pozisyonu doğrudan okuyan
+  // sürekli bir rAF döngüsü kullanıyoruz — mobil dahil her yerde pürüzsüz çalışır.
   function update(){
-    ticking = false;
-    // pencere normal akışta kayar; sahne her karede pencerenin viewport konumunu geri
-    // alarak ekrana çakılıymış gibi durur. overflow:hidden pencere dışını keser —
-    // position:fixed + clip-path'in aksine bu her tarayıcıda aynı davranır.
     var top = win.getBoundingClientRect().top;
     var vh = window.innerHeight;
-    if(top > vh + 60 || top < -(vh + 60)) return; // bölümden uzaktayken hiç dokunma
-    scene.style.transform = 'translateY(' + (-top).toFixed(2) + 'px)';
+    if(top <= vh + 60 && top >= -(vh + 60)){
+      scene.style.transform = 'translateY(' + (-top).toFixed(2) + 'px)';
+    }
+    requestAnimationFrame(update);
   }
-  app.addEventListener('scroll', function(){
-    if(!ticking){ ticking = true; requestAnimationFrame(update); }
-  }, {passive:true});
-  window.addEventListener('resize', update);
-  update();
+  requestAnimationFrame(update);
 })();
 
 (function mobileNav(){

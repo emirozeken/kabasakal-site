@@ -287,7 +287,9 @@ img{max-width:100%;display:block;}
 .scroll-mascot.show{ opacity:1; }
 .scroll-mascot.show[data-side="right"]{ transform:translateY(-50%) translateX(0) rotate(0deg); }
 .scroll-mascot.show[data-side="left"]{ transform:translateY(-50%) translateX(0) rotate(0deg); }
-@media (max-width:760px){ .scroll-mascot{display:none;} }
+/* Mobilde de gösteriliyor (kullanıcı isteği) — ama clamp'in 210px tabanı dar ekranda
+   burger'i ve caption metnini fazlaca kaplıyordu; mobile özel daha küçük bir ölçü. */
+@media (max-width:760px){ .scroll-mascot{ width:clamp(120px,32vw,210px); } }
 
 /* Live "spec sheet" HUD — a technical readout that ticks with scroll (sac sıcaklığı, mevcut işlem)
    echoing the griddle-temp counters in the reference videos. Decorative/atmospheric only (the
