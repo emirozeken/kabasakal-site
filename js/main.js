@@ -16,6 +16,7 @@ var supabaseClient = supabaseConfigured ? window.supabase.createClient(window.SU
   var stack = document.getElementById('stack');
   var captions = Array.prototype.slice.call(document.querySelectorAll('.caption'));
   var scrollMascots = Array.prototype.slice.call(document.querySelectorAll('.scroll-mascot'));
+  var layerFx = Array.prototype.slice.call(document.querySelectorAll('.layer-fx'));
   var outro = document.getElementById('outro');
   var stickyEl = scrollzoom.querySelector('.sticky');
   var scrollhintEl = document.getElementById('scrollhint');
@@ -108,6 +109,12 @@ var supabaseClient = supabaseConfigured ? window.supabase.createClient(window.SU
     scrollMascots.forEach(function(el){
       var stageIdx = parseInt(el.getAttribute('data-stage'),10);
       el.classList.toggle('show', Math.abs(stageFloat - stageIdx) < 0.42);
+    });
+    // Katman kendi "yaşam belirtisi" döngüsü (duman/parıltı/cızırtı/fokurdama) — sadece o
+    // an ekranda odaklanılan katmanda çalışır, CSS @keyframes ile (bkz. style.css).
+    layerFx.forEach(function(el){
+      var stageIdx = parseInt(el.getAttribute('data-stage'),10);
+      el.classList.toggle('active', Math.abs(stageFloat - stageIdx) < 0.42);
     });
     if(outro) outro.classList.toggle('show', stageFloat > 4.55);
     if(scrollhintEl) scrollhintEl.style.opacity = app.scrollTop > 20 ? 0 : 1;

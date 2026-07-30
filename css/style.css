@@ -230,6 +230,99 @@ img{max-width:100%;display:block;}
   box-shadow:0 14px 24px rgba(0,0,0,.4), inset 0 8px 12px rgba(255,255,255,.15);
 }
 
+/* Katman "yaşam belirtisi" döngüleri — yalnızca o an odaklanılan katmanda (.layer-fx.active,
+   js/main.js -> scrollZoom toggle'ıyor) sonsuz döngüde çalışır, aynı anda tek katman aktif
+   olduğu için maliyet ihmal edilebilir. Her döngü kendi periyodunda, birbirinden bağımsız.
+   ÖNEMLİ: .slab'ın kendi transform'unu (translateX(-50%)) animasyonla değiştiren patty
+   dışındakiler ::before/::after pseudo-eleman kullanıyor — host'un merkezleme transform'una
+   dokunmadan üstüne biner. */
+
+/* 1) Ekmek: iki duman tüyü, kaydırılmış gecikmeyle sırayla yükselip dağılıyor */
+.slab.bun-top.active::before,
+.slab.bun-top.active::after{
+  content:''; position:absolute; top:-4px; width:16px; height:36px; border-radius:50%;
+  background:radial-gradient(ellipse at center, rgba(255,255,255,.4), transparent 72%);
+  filter:blur(3px); opacity:0; pointer-events:none;
+  animation:steamRise 3.4s ease-in infinite;
+}
+.slab.bun-top.active::before{ left:36%; animation-delay:0s; }
+.slab.bun-top.active::after{ left:56%; width:12px; animation-delay:1.6s; }
+@keyframes steamRise{
+  0%{ opacity:0; transform:translateY(4px) translateX(0) scale(.75); }
+  18%{ opacity:.5; }
+  65%{ opacity:.22; }
+  100%{ opacity:0; transform:translateY(-42px) translateX(7px) scale(1.35); }
+}
+
+/* 2) Marul & domates: yaprağın üzerinden kayan bir tazelik parıltısı + domateste hafif ışıldama */
+.slab.lettuce.active::after{
+  content:''; position:absolute; inset:0; clip-path:inherit; pointer-events:none;
+  background:linear-gradient(100deg, transparent 25%, rgba(255,255,255,.4) 36%, transparent 47%);
+  background-size:280% 100%; background-position:130% 0;
+  mix-blend-mode:overlay;
+  animation:freshGlint 3.8s ease-in-out infinite;
+}
+@keyframes freshGlint{
+  0%,55%{ background-position:130% 0; }
+  100%{ background-position:-50% 0; }
+}
+.tomato.active{ animation:tomatoGlisten 2.6s ease-in-out infinite; }
+@keyframes tomatoGlisten{
+  0%,100%{ filter:brightness(1); }
+  50%{ filter:brightness(1.16); }
+}
+
+/* 3) Köfte: sacda cızırdayarak basılıp geri fırlıyor, tam o anda küçük buhar baloncukları patlıyor */
+.slab.patty.active{ animation:pattySizzle 2.6s ease-in-out infinite; }
+@keyframes pattySizzle{
+  0%, 34%, 100%{ transform:translateX(-50%) scaleY(1) translateY(0); filter:brightness(1); }
+  44%{ transform:translateX(-50%) scaleY(.9) translateY(4px); filter:brightness(1.08); }
+  56%{ transform:translateX(-50%) scaleY(1.05) translateY(-3px); filter:brightness(1); }
+  66%{ transform:translateX(-50%) scaleY(1) translateY(0); }
+}
+.slab.patty.active::after{
+  content:''; position:absolute; left:8%; right:8%; top:16%; height:18px; pointer-events:none;
+  background:
+    radial-gradient(circle, rgba(255,255,255,.55) 2px, transparent 2.6px) 8% 50%/16px 16px,
+    radial-gradient(circle, rgba(255,255,255,.45) 1.8px, transparent 2.4px) 42% 30%/16px 16px,
+    radial-gradient(circle, rgba(255,255,255,.55) 2px, transparent 2.6px) 76% 60%/16px 16px;
+  opacity:0; filter:blur(.5px);
+  animation:pattySizzleSteam 2.6s ease-in-out infinite;
+}
+@keyframes pattySizzleSteam{
+  0%,40%{ opacity:0; }
+  46%{ opacity:.85; }
+  60%{ opacity:0; }
+  100%{ opacity:0; }
+}
+
+/* 4) Sos: küçük baloncuklar dipten yükselip yüzeyde patlıyor (fokurdama) */
+.slab.sauce.active::after{
+  content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:
+    radial-gradient(circle, rgba(255,255,255,.6) 2px, transparent 2.6px) 14% 55%/22px 22px,
+    radial-gradient(circle, rgba(255,255,255,.5) 1.6px, transparent 2.2px) 42% 80%/22px 22px,
+    radial-gradient(circle, rgba(255,255,255,.6) 2px, transparent 2.6px) 70% 50%/22px 22px,
+    radial-gradient(circle, rgba(255,255,255,.5) 1.6px, transparent 2.2px) 88% 75%/22px 22px;
+  opacity:0;
+  animation:sauceBubble 2.3s ease-in-out infinite;
+}
+@keyframes sauceBubble{
+  0%{ opacity:0; background-position:14% 60%, 42% 85%, 70% 55%, 88% 80%; }
+  38%{ opacity:.9; }
+  75%{ opacity:0; background-position:14% 5%, 42% 25%, 70% 0%, 88% 20%; }
+  100%{ opacity:0; background-position:14% 60%, 42% 85%, 70% 55%, 88% 80%; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  /* JS zaten reduced-motion'da .active hiç eklemiyor (scrollZoom erken return), bu blok
+     ikinci bir güvence katmanı — kodun kendisi CSS-only okunduğunda da niyeti belli etsin. */
+  .slab.bun-top.active::before, .slab.bun-top.active::after, .slab.lettuce.active::after,
+  .tomato.active, .slab.patty.active, .slab.patty.active::after, .slab.sauce.active::after{
+    animation:none;
+  }
+}
+
 .caption{
   position:absolute; left:0; right:0; bottom:9%; z-index:20; text-align:center; padding:0 24px;
   pointer-events:none; opacity:0; transform:translateY(16px);
